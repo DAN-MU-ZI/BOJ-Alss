@@ -4,16 +4,12 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        String s = scanner.nextLine();
+        String s = scanner.next().toUpperCase();
         char[] charArray = s.toCharArray();
         int[] charCounter = new int[26];
 
         for (char c : charArray) {
-            if (c < 97) {
-                charCounter[c - 65]++;
-            } else {
-                charCounter[c - 97]++;
-            }
+            charCounter[c - 65]++;
         }
 
         char modeChar = 'A';
