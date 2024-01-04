@@ -5,14 +5,12 @@ import java.util.stream.Collectors;
 
 public class Main {
 	static int StringTimeToSeconds(String string) {
-		List<Integer> times = Arrays.stream(string.split(":"))
-			.map(Integer::parseInt)
-			.collect(Collectors.toList());
+        String[] times = string.split(":");
 
-		int timestamp;
-		timestamp = times.get(0);
-		timestamp = timestamp * 60 + times.get(1);
-		timestamp = timestamp * 60 + times.get(2);
+        int timestamp;
+		timestamp = Integer.parseInt(times[0]);
+		timestamp = timestamp * 60 + Integer.parseInt(times[1]);
+		timestamp = timestamp * 60 + Integer.parseInt(times[2]);
 
 		return timestamp;
 	}
