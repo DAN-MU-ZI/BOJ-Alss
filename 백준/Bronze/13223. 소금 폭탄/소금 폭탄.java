@@ -1,13 +1,10 @@
-import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class Main {
 	static int StringTimeToSeconds(String string) {
-        String[] times = string.split(":");
+		String[] times = string.split(":");
 
-        int timestamp;
+		int timestamp;
 		timestamp = Integer.parseInt(times[0]);
 		timestamp = timestamp * 60 + Integer.parseInt(times[1]);
 		timestamp = timestamp * 60 + Integer.parseInt(times[2]);
