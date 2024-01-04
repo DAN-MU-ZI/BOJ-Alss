@@ -25,25 +25,23 @@ public class Main {
 			}
 		}
 
-		int answer = 0;
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < m; j++) {
-				if (rowInfo[i] == 0 && colInfo[j] == 0) {
-					answer++;
-					rowInfo[i] = 1;
-					colInfo[j] = 1;
-				}
+		int rowCnt = 0;
+		for (int i : rowInfo) {
+			if (i == 0) {
+				rowCnt++;
 			}
 		}
-		for (int i = 0; i < n; i++) {
-			if (rowInfo[i] == 0) {
-				answer++;
+		int colCnt = 0;
+		for (int j : colInfo) {
+			if (j == 0) {
+				colCnt++;
 			}
 		}
-		for (int j = 0; j < m; j++) {
-			if (colInfo[j] == 0) {
-				answer++;
-			}
+		int answer;
+		if (rowCnt > colCnt) {
+			answer = rowCnt;
+		} else {
+			answer = colCnt;
 		}
 		System.out.printf("%d", answer);
 	}
