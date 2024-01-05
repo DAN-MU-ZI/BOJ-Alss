@@ -26,9 +26,10 @@ public class Main {
 		int e = n - 1;
 
 		while (s < e) {
-			if ((arr[s] + arr[e]) > x) {
+			int sum = arr[s] + arr[e];
+			if (sum > x) {
 				e--;
-			} else if ((arr[s] + arr[e]) < x) {
+			} else if (sum < x) {
 				s++;
 			} else {
 				s++;
