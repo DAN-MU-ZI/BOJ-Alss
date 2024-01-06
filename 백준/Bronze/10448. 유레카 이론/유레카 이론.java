@@ -18,22 +18,19 @@ public class Main {
 			s = s + i;
 			table[i - 1] = s;
 		}
-		for (int j = 0; j < t; j++) {
-			System.out.printf("%d\n", (func(br, table)));
-		}
-	}
 
-	private static int func(BufferedReader br, int[] table) throws IOException {
-		int n = Integer.parseInt(br.readLine());
-		for (int j : table) {
-			for (int k : table) {
-				for (int value : table) {
-					if (j + k + value == n) {
-						return 1;
-					}
+		int[] flagTable = new int[1001];
+		for (int i : table) {
+			for (int j : table) {
+				for (int k : table) {
+					if (i+j+k<=1000)
+						flagTable[i + j + k] = 1;
 				}
 			}
 		}
-		return 0;
+		for (int j = 0; j < t; j++) {
+			int n = Integer.parseInt(br.readLine());
+			System.out.printf("%d\n", flagTable[n]);
+		}
 	}
 }
