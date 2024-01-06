@@ -8,16 +8,17 @@ public class Main {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 		int N = Integer.parseInt(br.readLine());
-		int[] arr = new int[N];
+		int[] arr = new int[10001];
 
 		for (int i = 0; i < N; i++) {
-			arr[i] = Integer.parseInt(br.readLine());
+			arr[Integer.parseInt(br.readLine())]++;
 		}
-		Arrays.sort(arr);
 
 		StringBuilder answer = new StringBuilder();
-		for (int i = 0; i < N; i++) {
-			answer.append(arr[i]).append("\n");
+		for (int i = 0; i < 10001; i++) {
+			if (arr[i] != 0) {
+				answer.append(String.format(i + "\n").repeat(arr[i]));
+			}
 		}
 		System.out.printf(answer.toString());
 	}
