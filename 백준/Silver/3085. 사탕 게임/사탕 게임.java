@@ -20,8 +20,7 @@ public class Main {
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n - 1; j++) {
 				swap(arr, i, j, i, j + 1);
-				getMaxCountByColumn(arr);
-				getMaxCountByRow(arr);
+				getMaxCount(arr);
 				swap(arr, i, j + 1, i, j);
 			}
 		}
@@ -29,8 +28,7 @@ public class Main {
 		for (int j = 0; j < n; j++) {
 			for (int i = 0; i < n - 1; i++) {
 				swap(arr, i, j, i + 1, j);
-				getMaxCountByColumn(arr);
-				getMaxCountByRow(arr);
+				getMaxCount(arr);
 				swap(arr, i + 1, j, i, j);
 			}
 		}
@@ -45,7 +43,7 @@ public class Main {
 		arr[x2][y2] = tmp;
 	}
 
-	static void getMaxCountByRow(char[][] arr) {
+	static void getMaxCount(char[][] arr) {
 		for (int j = 0; j < arr.length; j++) {
 			int cnt = 1;
 			for (int i = 0; i < arr.length - 1; i++) {
@@ -57,9 +55,7 @@ public class Main {
 				}
 			}
 		}
-	}
 
-	static void getMaxCountByColumn(char[][] arr) {
 		for (char[] chars : arr) {
 			int cnt = 1;
 			for (int j = 0; j < arr.length - 1; j++) {
