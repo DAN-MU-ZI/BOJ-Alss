@@ -31,7 +31,7 @@ public class Main {
 					}
 				}
 			}
-			sb.append(String.format("%d %d\n", i + 1, answer));
+			sb.append(i+1).append(" ").append(answer).append("\n");
 		}
 		bw.write(String.valueOf(sb));
 		bw.close();
