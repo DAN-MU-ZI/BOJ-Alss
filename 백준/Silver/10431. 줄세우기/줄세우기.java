@@ -21,14 +21,9 @@ public class Main {
 		for (int i = 0; i < 20; i++) {
 			int n = Integer.parseInt(st.nextToken());
 			arr[i] = n;
-			for (int j = i; j > 0; j--) {
-				for (int k = j; k > 0; k--) {
-					if (arr[k] < arr[k - 1]) {
-						int tmp = arr[k];
-						arr[k] = arr[k - 1];
-						arr[k - 1] = tmp;
-						answer++;
-					}
+			for (int j = i - 1; j >= 0; j--) {
+				if (arr[j] > arr[i]) {
+					answer++;
 				}
 			}
 		}
