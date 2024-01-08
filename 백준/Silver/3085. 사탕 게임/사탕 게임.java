@@ -1,8 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Objects;
 
 public class Main {
 	static int answer = 1;
@@ -18,21 +16,20 @@ public class Main {
 		}
 
 		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < n - 1; j++) {
-				swap(arr, i, j, i, j + 1);
-				getMaxCount(arr);
-				swap(arr, i, j + 1, i, j);
+			for (int j = 0; j < n; j++) {
+				if (j + 1 < n) {
+					swap(arr, i, j, i, j + 1);
+					getMaxCount(arr);
+					swap(arr, i, j + 1, i, j);
+				}
+
+				if (i + 1 < n) {
+					swap(arr, i, j, i + 1, j);
+					getMaxCount(arr);
+					swap(arr, i + 1, j, i, j);
+				}
 			}
 		}
-
-		for (int j = 0; j < n; j++) {
-			for (int i = 0; i < n - 1; i++) {
-				swap(arr, i, j, i + 1, j);
-				getMaxCount(arr);
-				swap(arr, i + 1, j, i, j);
-			}
-		}
-
 		System.out.println(answer);
 	}
 
