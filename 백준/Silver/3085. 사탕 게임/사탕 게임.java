@@ -17,13 +17,13 @@ public class Main {
 
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
-				if (j + 1 < n) {
+				if (j + 1 < n && arr[i][j] != arr[i][j + 1]) {
 					swap(arr, i, j, i, j + 1);
 					getMaxCount(arr);
 					swap(arr, i, j + 1, i, j);
 				}
 
-				if (i + 1 < n) {
+				if (i + 1 < n && arr[i][j] != arr[i + 1][j]) {
 					swap(arr, i, j, i + 1, j);
 					getMaxCount(arr);
 					swap(arr, i + 1, j, i, j);
