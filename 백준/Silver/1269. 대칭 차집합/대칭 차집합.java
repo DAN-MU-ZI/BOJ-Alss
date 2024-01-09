@@ -32,8 +32,7 @@ public class Main {
 			if (b[i])
 				answer++;
 			if (a[i] && b[i]) {
-				answer--;
-				answer--;
+				answer -= 2;
 			}
 		}
 		System.out.println(answer);
