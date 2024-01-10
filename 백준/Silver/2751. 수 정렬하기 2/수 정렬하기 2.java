@@ -19,11 +19,8 @@ public class Main {
 		}
 
 		for (int i = 0; i < RANGE; i++) {
-			if (arr[i] > 0) {
-				int value = i - SHIFT;
-				for (int j = 0; j < arr[i]; j++) {
-					bw.write(value + "\n");
-				}
+			for (int j = 0; j < arr[i]; j++) {
+				bw.write(i - SHIFT + "\n");
 			}
 		}
 		bw.close();
