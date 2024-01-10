@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
@@ -17,14 +18,18 @@ public class Main {
 		StringTokenizer st;
 		for (int i = 0; i < n; i++) {
 			st = new StringTokenizer(br.readLine());
-			history.put(st.nextToken(), st.nextToken());
+			String name = st.nextToken();
+			String state = st.nextToken();
+
+			if(state.equals("enter"))
+				history.put(name, state);
+			else
+				history.remove(name);
 		}
 
 		StringBuilder sb = new StringBuilder();
 		for (String s : history.keySet()) {
-			if (history.get(s).equals("enter")) {
-				sb.append(s).append("\n");
-			}
+			sb.append(s).append("\n");
 		}
 		bw.write(String.valueOf(sb));
 		bw.close();
