@@ -3,8 +3,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -13,22 +11,22 @@ public class Main {
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
 		int n = Integer.parseInt(br.readLine());
-		String[][] arr = new String[n][2];
-
+		StringBuilder[] arr = new StringBuilder[201];
 		StringTokenizer st;
 		for (int i = 0; i < n; i++) {
 			st = new StringTokenizer(br.readLine());
-			arr[i][0] = st.nextToken();
-			arr[i][1] = st.nextToken();
-		}
+			int age = Integer.parseInt(st.nextToken());
 
-		Arrays.sort(arr, Comparator.comparingInt(o -> Integer.parseInt(o[0])));
-
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < n; i++) {
-			sb.append(arr[i][0]).append(" ").append(arr[i][1]).append("\n");
+			if (arr[age] == null) {
+				arr[age] = new StringBuilder();
+			}
+			arr[age].append(age).append(" ").append(st.nextToken()).append("\n");
 		}
-		bw.write(String.valueOf(sb));
+		for (StringBuilder sb : arr) {
+			if (sb != null) {
+				bw.write(String.valueOf(sb));
+			}
+		}
 		bw.close();
 	}
 }
