@@ -3,23 +3,28 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.Arrays;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
+		int RANGE = 2000001;
+		int SHIFT = 1000000;
+		int[] arr = new int[RANGE];
+
 		int n = Integer.parseInt(br.readLine());
-		int[] arr = new int[n];
 		for (int i = 0; i < n; i++) {
-			arr[i] = Integer.parseInt(br.readLine());
+			arr[Integer.parseInt(br.readLine()) + SHIFT]++;
 		}
 
-		Arrays.sort(arr);
-
-		for (int i : arr) {
-			bw.write(i + "\n");
+		for (int i = 0; i < RANGE; i++) {
+			if (arr[i] > 0) {
+				int value = i - SHIFT;
+				for (int j = 0; j < arr[i]; j++) {
+					bw.write(value + "\n");
+				}
+			}
 		}
 		bw.close();
 	}
