@@ -21,14 +21,20 @@ public class Main {
 			arr[i] = Integer.parseInt(st.nextToken());
 		}
 
+		int[] tmp = new int[n + 1];
 		for (int i = 0; i < m; i++) {
 			st = new StringTokenizer(br.readLine());
 			int a = Integer.parseInt(st.nextToken());
 			int b = Integer.parseInt(st.nextToken());
 			int k = Integer.parseInt(st.nextToken());
-			for (int j = a - 1; j < b; j++) {
-				arr[j] += k;
-			}
+			tmp[a-1] += k;
+			tmp[b] -= k;
+		}
+		for (int i = 0; i < n; i++) {
+			tmp[i + 1] += tmp[i];
+		}
+		for (int i = 0; i < n; i++) {
+			arr[i] += tmp[i];
 		}
 
 		System.out.println(Arrays.stream(arr)
