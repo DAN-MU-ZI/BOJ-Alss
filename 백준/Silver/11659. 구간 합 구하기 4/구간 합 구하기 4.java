@@ -20,11 +20,13 @@ public class Main {
 			arr[i] = num + arr[i - 1];
 		}
 
+		StringBuilder sb = new StringBuilder();
 		for (int j = 0; j < m; j++) {
 			st = new StringTokenizer(br.readLine());
 			int a = Integer.parseInt(st.nextToken());
 			int b = Integer.parseInt(st.nextToken());
-			System.out.println(arr[b] - arr[a - 1]);
+			sb.append(arr[b] - arr[a - 1]).append("\n");
 		}
+		System.out.println(sb);
 	}
 }
