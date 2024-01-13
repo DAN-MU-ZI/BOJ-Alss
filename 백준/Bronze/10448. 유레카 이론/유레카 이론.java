@@ -1,8 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.annotation.ElementType;
-import java.util.concurrent.CountDownLatch;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
@@ -14,19 +12,21 @@ public class Main {
 			table[i] = table[i - 1] + i;
 		}
 
-		int[] flagTable = new int[1001];
+		boolean[] flagTable = new boolean[1001];
 		for (int i = 1; i < table.length; i++) {
 			for (int j = 1; j < table.length; j++) {
 				for (int k = 1; k < table.length; k++) {
 					int sum = table[i] + table[j] + table[k];
 					if (sum <= 1000)
-						flagTable[sum] = 1;
+						flagTable[sum] = true;
 				}
 			}
 		}
+		StringBuilder sb = new StringBuilder();
 		for (int j = 0; j < t; j++) {
 			int n = Integer.parseInt(br.readLine());
-			System.out.printf("%d\n", flagTable[n]);
+			sb.append(flagTable[n] ? 1 : 0).append("\n");
 		}
+		System.out.println(sb);
 	}
 }
