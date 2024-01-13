@@ -33,12 +33,6 @@ def solution():
             w_tmp = w[i][j] - w[i][j - k] - w[i - k][j] + w[i - k][j - k]
             answer = min(answer, b_tmp, w_tmp)
 
-    # for line in b:
-    #     print(line)
-    # print()
-
-    # for line in w:
-    #     print(line)
     print(answer)
 
 
