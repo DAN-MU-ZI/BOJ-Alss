@@ -29,14 +29,15 @@ public class Main {
 			board[idx] = c;
 			history[c - 'A'] = true;
 		}
-
+		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < n; i++) {
 			if (board[idx] == 0) {
-				System.out.print("?");
+				sb.append("?");
 			} else {
-				System.out.printf("%c", board[idx]);
+				sb.append((char)board[idx]);
 			}
 			idx = (--idx + n) % n;
 		}
+		System.out.println(sb);
 	}
 }
