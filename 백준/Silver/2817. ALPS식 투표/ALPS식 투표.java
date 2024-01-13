@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -48,10 +47,12 @@ public class Main {
 			chips[x]++;
 		}
 
+		StringBuilder sb = new StringBuilder();
 		for (char c = 'A'; c <= 'Z'; c++) {
 			if (visited[c - 'A']) {
-				System.out.printf("%c %d\n", c, chips[members[c - 'A']]);
+				sb.append(c).append(" ").append(chips[members[c - 'A']]).append("\n");
 			}
 		}
+		System.out.println(sb);
 	}
 }
