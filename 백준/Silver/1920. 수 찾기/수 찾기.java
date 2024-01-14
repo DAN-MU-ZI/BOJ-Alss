@@ -6,19 +6,20 @@ import java.util.StringTokenizer;
 
 public class Main {
 	static int binaryFind(int num, int[] arr, int start, int end) {
-		if (start > end)
-			return 0;
+		while(true) {
+			if (start > end)
+				return 0;
 
-		int mid = (start + end) / 2;
+			int mid = (start + end) / 2;
 
-		if (arr[mid] == num)
-			return 1;
-		else if (arr[mid] < num) {
-			start = mid + 1;
-		} else {
-			end = mid - 1;
+			if (arr[mid] == num)
+				return 1;
+			else if (arr[mid] < num) {
+				start = mid + 1;
+			} else {
+				end = mid - 1;
+			}
 		}
-		return binaryFind(num, arr, start, end);
 	}
 
 	public static void main(String[] args) throws IOException {
@@ -35,7 +36,7 @@ public class Main {
 
 		int m = Integer.parseInt(br.readLine());
 		StringBuilder sb = new StringBuilder();
-		
+
 		st = new StringTokenizer(br.readLine());
 		for (int j = 0; j < m; j++) {
 			int num = Integer.parseInt(st.nextToken());
