@@ -1,8 +1,8 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -11,15 +11,15 @@ public class Main {
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int n = Integer.parseInt(st.nextToken());
 		int m = Integer.parseInt(st.nextToken());
-		Set<String> set = new HashSet<>();
+		Map<String, Boolean> map = new HashMap<>();
 
 		for (int i = 0; i < n; i++) {
-			set.add(br.readLine());
+			map.put(br.readLine(), true);
 		}
 
 		int answer = 0;
 		for (int i = 0; i < m; i++) {
-			if (set.contains(br.readLine())) {
+			if (map.get(br.readLine()) != null) {
 				answer++;
 			}
 		}
