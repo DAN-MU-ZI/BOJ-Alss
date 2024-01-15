@@ -15,7 +15,7 @@ public class Main {
 		long s = 1, e = 1L << 32, res = -1;
 		while (s <= e) {
 			long m = (s + e) / 2;
-			if (m >= (n - 1) / m + 1) {
+			if (Math.pow(m, 2) >= n) {
 				e = m - 1;
 				res = m;
 			} else
