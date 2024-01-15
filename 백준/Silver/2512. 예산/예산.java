@@ -20,7 +20,6 @@ public class Main {
 
 		int s = 0;
 		int e = Arrays.stream(arr).max().getAsInt();
-		int answer = 0;
 		while (s <= e) {
 			int mid = (s + e) / 2;
 			int sum = 0;
@@ -30,10 +29,9 @@ public class Main {
 
 			if (m >= sum) {
 				s = mid + 1;
-				answer = mid;
 			} else
 				e = mid - 1;
 		}
-		System.out.println(answer);
+		System.out.println(e);
 	}
 }
