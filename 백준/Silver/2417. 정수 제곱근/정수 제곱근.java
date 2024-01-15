@@ -12,7 +12,7 @@ public class Main {
 	private static long func(long n) {
 		if (n == 0)
 			return 0;
-		long s = 1, e = 1L << 32, res = -1;
+		long s = 0, e = n, res = -1;
 		while (s <= e) {
 			long m = (s + e) / 2;
 			if (Math.pow(m, 2) >= n) {
