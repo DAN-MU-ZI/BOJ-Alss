@@ -1,7 +1,8 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -18,14 +19,16 @@ public class Main {
 			arrA[i] = Integer.parseInt(st.nextToken()) + arrA[i - 1];
 		}
 
-		int[] ae = new int[(n * (n + 1)) / 2];
-		int idx = 0;
+		Map<Integer, Integer> mapA = new HashMap<>();
 		for (int i = 1; i < n + 1; i++) {
 			for (int j = 0; j < i; j++) {
-				ae[idx++] = arrA[i] - arrA[j];
+				int sum = arrA[i] - arrA[j];
+				if (mapA.containsKey(sum))
+					mapA.replace(sum, mapA.get(sum) + 1);
+				else
+					mapA.put(sum, 1);
 			}
 		}
-		Arrays.sort(ae);
 
 		int m = Integer.parseInt(br.readLine());
 		st = new StringTokenizer(br.readLine());
@@ -34,65 +37,26 @@ public class Main {
 			arrB[i] = Integer.parseInt(st.nextToken()) + arrB[i - 1];
 		}
 
-		int[] be = new int[(m * (m + 1)) / 2];
-		idx = 0;
+		Map<Integer, Integer> mapB = new HashMap<>();
 		for (int i = 1; i < m + 1; i++) {
 			for (int j = 0; j < i; j++) {
-				be[idx++] = arrB[i] - arrB[j];
+				int sum = arrB[i] - arrB[j];
+				if (mapB.containsKey(sum))
+					mapB.replace(sum, mapB.get(sum) + 1);
+				else
+					mapB.put(sum, 1);
 			}
 		}
-		Arrays.sort(be);
 
 		long answer = 0;
-		idx = 0;
-		while (idx < ae.length) {
-			int target = t - ae[idx];
-			int dstRange = getRange(be, target);
-
-			if (dstRange == 0) {
-				idx++;
+		for (int a : mapA.keySet()) {
+			int target = t - a;
+			Integer rangeB = mapB.get(target);
+			if (rangeB == null)
 				continue;
-			}
-
-			int srcRange = getRange(ae, ae[idx]);
-
-			answer += (long)srcRange * dstRange;
-			idx += srcRange;
+			Integer rangeA = mapA.get(a);
+			answer += (long)rangeA * rangeB;
 		}
 		System.out.println(answer);
-	}
-
-	static int getRange(int[] arr, int x) {
-		return binaryUpperFind(arr, x) - binaryLowerFind(arr, x);
-	}
-
-	static int binaryLowerFind(int[] arr, int x) {
-		int idx = arr.length;
-		int s = 0, e = arr.length - 1;
-		while (s <= e) {
-			int m = (s + e) / 2;
-			if (arr[m] < x)
-				s = m + 1;
-			else {
-				e = m - 1;
-				idx = m;
-			}
-		}
-		return idx;
-	}
-
-	static int binaryUpperFind(int[] arr, int x) {
-		int idx = arr.length;
-		int s = 0, e = arr.length - 1;
-		while (s <= e) {
-			int m = (s + e) / 2;
-			if (arr[m] <= x)
-				s = m + 1;
-			else {
-				e = m - 1;
-				idx = m;
-			}
-		}
-		return idx;
 	}
 }
