@@ -7,12 +7,14 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int T = Integer.parseInt(br.readLine());
+		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < T; i++) {
-			func(br);
+			sb.append(func(br)).append("\n");
 		}
+		System.out.println(sb);
 	}
 
-	static void func(BufferedReader br) throws IOException {
+	static int func(BufferedReader br) throws IOException {
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int N = Integer.parseInt(st.nextToken());
 		int M = Integer.parseInt(st.nextToken());
@@ -26,20 +28,17 @@ public class Main {
 			arr[i] = Integer.parseInt(st.nextToken());
 		}
 
-		int answer = 0;
-
 		int sum = 0;
 		for (int i = 0; i < M; i++) {
 			sum += arr[i];
 		}
-		if (sum < K)
-			answer++;
 
-		int idx = M;
 		if (N == M) {
-			System.out.println(answer);
+			return sum < K ? 1 : 0;
 		} else {
-			answer = 0;
+			int answer = 0;
+			int idx = M;
+
 			while (!visited[idx]) {
 				visited[idx] = true;
 				sum += arr[idx];
@@ -48,7 +47,7 @@ public class Main {
 				if (sum < K)
 					answer++;
 			}
-			System.out.println(answer);
+			return answer;
 		}
 	}
 }
