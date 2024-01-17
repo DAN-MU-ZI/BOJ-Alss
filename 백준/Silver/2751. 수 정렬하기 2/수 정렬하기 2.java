@@ -11,15 +11,15 @@ public class Main {
 
 		int RANGE = 2000001;
 		int SHIFT = 1000000;
-		int[] arr = new int[RANGE];
+		boolean[] arr = new boolean[RANGE];
 
 		int n = Integer.parseInt(br.readLine());
 		for (int i = 0; i < n; i++) {
-			arr[Integer.parseInt(br.readLine()) + SHIFT]++;
+			arr[Integer.parseInt(br.readLine()) + SHIFT] = true;
 		}
 
 		for (int i = 0; i < RANGE; i++) {
-			for (int j = 0; j < arr[i]; j++) {
+			if (arr[i]) {
 				bw.write(i - SHIFT + "\n");
 			}
 		}
