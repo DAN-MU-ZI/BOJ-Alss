@@ -26,7 +26,11 @@ public class Main {
 			arr[i] = list.remove(newIdx);
 			idx = newIdx;
 		}
-		String answer = "<" + Arrays.stream(arr).mapToObj(String::valueOf).collect(Collectors.joining(", ")) + ">";
-		System.out.println(answer);
+
+		System.out.println("<" +
+			Arrays.stream(arr)
+				.mapToObj(String::valueOf)
+				.collect(Collectors.joining(", ")) +
+			">");
 	}
 }
