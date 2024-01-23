@@ -3,12 +3,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 import java.util.StringTokenizer;
 
 public class Main {
-	static int[] parent;
-	static ArrayList<Integer>[] child;
+	static List<Integer>[] graph;
 	static boolean[] visited;
 	static int[] size;
 
@@ -23,7 +21,7 @@ public class Main {
 
 		visited = new boolean[N + 1];
 		size = new int[N + 1];
-		List<Integer>[] graph = new ArrayList[N + 1];
+		graph = new ArrayList[N + 1];
 		for (int i = 0; i < N + 1; i++) {
 			graph[i] = new ArrayList<>();
 		}
@@ -35,26 +33,6 @@ public class Main {
 
 			graph[a].add(b);
 			graph[b].add(a);
-		}
-
-		parent = new int[N + 1];
-		Stack<Integer> stk = new Stack<>();
-		stk.push(R);
-
-		child = new ArrayList[N + 1];
-		for (int i = 0; i < N + 1; i++) {
-			child[i] = new ArrayList<>();
-		}
-
-		while (!stk.isEmpty()) {
-			int root = stk.pop();
-			for (int node : graph[root]) {
-				if (node != parent[root]) {
-					child[root].add(node);
-					parent[node] = root;
-					stk.push(node);
-				}
-			}
 		}
 
 		countSubTree(R);
@@ -75,7 +53,7 @@ public class Main {
 
 		visited[start] = true;
 		int result = 1;
-		for (int node : child[start]) {
+		for (int node : graph[start]) {
 			if (!visited[node]) {
 				result += countSubTree(node);
 			}
