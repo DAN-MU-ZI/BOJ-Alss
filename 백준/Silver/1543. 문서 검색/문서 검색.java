@@ -10,20 +10,13 @@ public class Main {
         int idx = 0;
         int answer = 0;
         while (idx <= (str.length() - word.length())) {
-            if (str.charAt(idx) == word.charAt(0)) {
-                boolean equalFlag = true;
-                for (int i = 0; i < word.length(); i++) {
-                    if (str.charAt(idx + i) != word.charAt(i)) {
-                        equalFlag = false;
-                        break;
-                    }
-                }
-                if (equalFlag) {
-                    answer++;
-                    idx = idx + word.length() - 1;
-                }
+            int findIdx =str.indexOf(word, idx);
+            if(findIdx == -1){
+                break;
             }
-            idx++;
+
+            idx = findIdx+word.length();
+            answer++;
         }
         System.out.println(answer);
     }
