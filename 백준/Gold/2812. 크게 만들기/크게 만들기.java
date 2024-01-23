@@ -27,8 +27,10 @@ public class Main {
 		while (K-- > 0) {
 			stk.pop();
 		}
+		StringBuilder sb = new StringBuilder();
 		for (int i : stk) {
-			System.out.print(i);
+			sb.append(i);
 		}
+		System.out.println(sb);
 	}
 }
