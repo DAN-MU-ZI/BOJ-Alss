@@ -16,7 +16,7 @@ public class Main {
 		}
 
 		for (int i = 1; i < 11; i++) {
-			for (int j = 1; j < 2001; j++) {
+			for (int j = (int)Math.pow(2,i-1); j < 2001; j++) {
 				dp[i][j] = dp[i - 1][j / 2] + dp[i][j - 1];
 			}
 		}
