@@ -7,8 +7,6 @@ import java.util.StringTokenizer;
 
 public class Main {
 	static List<Character> vowels = List.of('a', 'e', 'i', 'o', 'u');
-	static List<Character> consonants = List.of('b', 'c', 'd', 'f', 'g', 'h', 'j', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
-		's', 't', 'v', 'x', 'y', 'z');
 	static int L;
 	static int C;
 	static char[] arr;
@@ -57,6 +55,7 @@ public class Main {
 		else
 			consonantCnt++;
 		func(depth + 1);
+		
 		visited[depth] = false;
 		if (vowels.contains(arr[depth]))
 			vowelCnt--;
