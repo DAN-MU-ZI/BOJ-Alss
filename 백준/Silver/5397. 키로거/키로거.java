@@ -10,6 +10,7 @@ public class Main {
 
 		int T = Integer.parseInt(br.readLine());
 
+		StringBuilder sb = new StringBuilder();
 		while (T-- > 0) {
 			char[] charArray = br
 				.readLine()
@@ -40,12 +41,13 @@ public class Main {
 				}
 			}
 
-			StringBuilder sb = new StringBuilder();
 			stk.forEach(sb::append);
-			
+
 			Collections.reverse(tmp);
 			tmp.forEach(sb::append);
-			System.out.println(sb);
+
+			sb.append("\n");
 		}
+		System.out.println(sb);
 	}
 }
