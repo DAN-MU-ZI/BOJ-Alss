@@ -1,5 +1,4 @@
 import sys
-import copy
 
 input = sys.stdin.readline
 
@@ -11,17 +10,20 @@ def dfs(target, row, col, right_up, left_down):
         answer += 1
         return
 
-    for j in range(target):
-        if col[j] or right_up[j - row] or left_down[j + row]:
+    for i in range(target):
+        leftIdx = i + row
+        rightIdx = i - row + target
+
+        if col[i] or right_up[rightIdx] or left_down[leftIdx]:
             continue
 
-        col[j] = True
-        right_up[j - row] = True
-        left_down[j + row] = True
+        col[i] = True
+        right_up[rightIdx] = True
+        left_down[leftIdx] = True
         dfs(target, row + 1, col, right_up, left_down)
-        col[j] = False
-        right_up[j - row] = False
-        left_down[j + row] = False
+        col[i] = False
+        right_up[rightIdx] = False
+        left_down[leftIdx] = False
 
 
 def solution():
@@ -30,9 +32,9 @@ def solution():
     answer = 0
 
     row = 0
-    col = [False for _ in range(n)]
-    right_up = [False for _ in range(2 * n + 1)]
-    left_down = [False for _ in range(2 * n + 1)]
+    col = [False] * n
+    right_up = [False] * (2 * n + 1)
+    left_down = [False] * (2 * n + 1)
 
     dfs(n, row, col, right_up, left_down)
     print(answer)
