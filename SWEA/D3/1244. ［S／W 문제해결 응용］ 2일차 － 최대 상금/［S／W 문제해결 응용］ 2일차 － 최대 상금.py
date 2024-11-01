@@ -31,9 +31,8 @@ for test_case in range(1, T + 1):
     answer = 0
     arr, count = input().split()
     arr = list(arr)
-    save = {k: set() for k in range(11)}
-
     count = int(count)
+    save = {k: set() for k in range(count+1)}
 
     dfs(arr, count)
     print(f"#{test_case} {answer}")
