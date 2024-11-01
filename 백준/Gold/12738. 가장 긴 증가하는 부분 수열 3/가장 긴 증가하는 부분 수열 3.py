@@ -12,18 +12,21 @@ for i in range(N):
     node = A[i]
 
     left = 0
-    right = len(arr)
-    while left < right:
+    right = len(arr) - 1
+    pos = -1
+    while left <= right:
         mid = (left + right) // 2
+
         if node > arr[mid]:
             left = mid + 1
         else:
-            right = mid
+            right = mid - 1
+            pos = mid
 
-    if len(arr) == right:
+    if pos == -1:
         arr.append(node)
     else:
-        arr[right] = node
+        arr[pos] = node
 
 
 print(len(arr))
