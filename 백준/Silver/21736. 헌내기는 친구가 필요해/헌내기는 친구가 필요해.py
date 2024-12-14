@@ -18,6 +18,7 @@ def getStart(arr):
 x, y = getStart(arr)
 stk = deque([[x, y]])
 visited = [[False] * M for _ in range(N)]
+visited[x][y] = True
 
 
 def is_valid(r, c):
@@ -29,10 +30,6 @@ while stk:
     pos = stk.popleft()
     r, c = pos
 
-    if visited[r][c]:
-        continue
-
-    visited[r][c] = True
     if arr[r][c] == "P":
         answer += 1
 
@@ -43,6 +40,7 @@ while stk:
                 continue
             if visited[nr][nc]:
                 continue
+            visited[nr][nc] = True
             stk.append([nr, nc])
 
 if answer == 0:
