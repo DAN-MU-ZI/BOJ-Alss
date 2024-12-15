@@ -6,9 +6,24 @@ N = int(input())
 M = int(input())
 S = input().strip()
 
-slide = "IO" * N + "I"
+slide_len = N * 2 + 1
 answer = 0
-for i in range(0, M - len(slide) + 1):
-    if S[i : i + len(slide)] == slide:
-        answer += 1
+
+e = "I"
+stk = 0
+for c in S:
+    if c != e:
+        stk = 0
+        e = "I"
+
+    if c == e:
+        stk += 1
+        if stk >= slide_len and e == "I":
+            answer += 1
+        if e == "I":
+            e = "O"
+        else:
+            e = "I"
+
+
 print(answer)
