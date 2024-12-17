@@ -26,6 +26,9 @@ while stk:
     for i in range(N):
         if arr[c][i] != 1:
             continue
+        if visited[r][i]:
+            continue
+
         stk.append([r, i])
 
 for line in arr:
