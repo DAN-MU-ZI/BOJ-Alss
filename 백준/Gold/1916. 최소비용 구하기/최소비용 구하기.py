@@ -1,5 +1,6 @@
 import sys
 from heapq import heappop, heappush
+from collections import deque
 
 input = sys.stdin.readline
 
@@ -18,11 +19,14 @@ s, e = map(int, input().split())
 def dijkstra(s, e, graph, n):
     distance = [INF] * (N + 1)
     distance[s] = 0
-    heap = []
-    heappush(heap, (0, s))
+    # heap = []
+    # heappush(heap, (0, s))
+    heap = deque()
+    heap.append((0, s))
 
     while heap:
-        dis, node = heappop(heap)
+        # dis, node = heappop(heap)
+        dis, node = heap.popleft()
 
         if dis > distance[node]:
             continue
@@ -32,7 +36,8 @@ def dijkstra(s, e, graph, n):
 
             if cost < distance[next_node]:
                 distance[next_node] = cost
-                heappush(heap, (cost, next_node))
+                # heappush(heap, (cost, next_node))
+                heap.append((cost, next_node))
 
     return distance[e]
 
