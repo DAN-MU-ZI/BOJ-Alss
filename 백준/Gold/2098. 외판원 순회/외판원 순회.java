@@ -23,33 +23,34 @@ public class Main {
 		bw.close();
 	}
 
-	public static int solution(int N, int[][] arr) {
-		int[][] dp = new int[N][1 << N];
-		for (int i = 0; i < N; i++) {
-			Arrays.fill(dp[i], 1000000 * 16);
+	public static int dfs(int N, int[][] arr, int[][] dp, int cur, int visit) {
+		if (visit == (1 << N) - 1) {
+			if (arr[cur][0] != 0)
+				return arr[cur][0];
+			return 1000000 * 16;
 		}
 
-		dp[0][1] = 0;
+		if (dp[cur][visit] != -1)
+			return dp[cur][visit];
 
-		for (int mask = 1; mask < 1 << N; mask++) {
-			for (int u = 0; u < N; u++) {
-				if ((mask & (1 << u)) == 0)
-					continue;
+		int cost = 1000000 * 16;
 
-				for (int v = 0; v < N; v++) {
-					if ((mask & (1 << v)) != 0 || arr[u][v] == 0)
-						continue;
-
-					dp[v][mask | (1 << v)] = Math.min(dp[v][mask | (1 << v)], dp[u][mask] + arr[u][v]);
-				}
+		for (int i = 0; i < N; i++) {
+			if ((visit & (1 << i)) == 0 && arr[cur][i] > 0) {
+				cost = Math.min(cost, dfs(N, arr, dp, i, visit | (1 << i)) + arr[cur][i]);
 			}
 		}
 
-		int answer = 1000000 * 16;
-		for (int i = 1; i < N; i++) {
-			if (arr[i][0] != 0)
-				answer = Math.min(answer, dp[i][(1 << N) - 1] + arr[i][0]);
+		dp[cur][visit] = cost;
+		return cost;
+	}
+
+	public static int solution(int N, int[][] arr) {
+		int[][] dp = new int[N][1 << N];
+		for (int i = 0; i < N; i++) {
+			Arrays.fill(dp[i], -1);
 		}
-		return answer;
+
+		return dfs(N, arr, dp, 0, 1);
 	}
 }
