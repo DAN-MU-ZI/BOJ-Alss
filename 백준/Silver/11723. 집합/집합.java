@@ -8,37 +8,30 @@ public class Main {
 		StringBuilder sb = new StringBuilder();
 
 		int M = Integer.parseInt(br.readLine());
-		boolean[] mask = new boolean[1 << 21 + 1];
+		int bitmask = 0;
 
 		StringTokenizer st;
 		for (int i = 0; i < M; i++) {
 			st = new StringTokenizer(br.readLine());
 			String command = st.nextToken();
 
-			if (command.equals("all")) {
-				for (int j = 1; j < 21; j++) {
-					mask[1 << j] = true;
-				}
-				continue;
-			}
-
-			if (command.equals("empty")) {
-				mask = new boolean[1 << 21 + 1];
-				continue;
-			}
-
-			int x = Integer.parseInt(st.nextToken());
 			if (command.equals("add")) {
-				mask[1 << x] = true;
+				int x = Integer.parseInt(st.nextToken());
+				bitmask |= (1 << x);
 			} else if (command.equals("remove")) {
-				mask[1 << x] = false;
+				int x = Integer.parseInt(st.nextToken());
+				bitmask &= ~(1 << x);
 			} else if (command.equals("check")) {
-				if (mask[1 << x]) sb.append("1\n");
-				else sb.append("0\n");
+				int x = Integer.parseInt(st.nextToken());
+				sb.append((bitmask & (1 << x)) != 0 ? "1\n" : "0\n");
 			} else if (command.equals("toggle")) {
-				mask[1 << x] = !mask[1 << x];
+				int x = Integer.parseInt(st.nextToken());
+				bitmask ^= (1 << x);
+			} else if (command.equals("all")) {
+				bitmask = (1 << 21) - 1;
+			} else if (command.equals("empty")) {
+				bitmask = 0;
 			}
-
 		}
 
 		bw.write(sb.toString());
