@@ -1,112 +1,100 @@
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    static long[] dp;        // 1D 배열: dp[mask*K + r]
-    static long[] factorial; // 팩토리얼 (N!까지)
-    static long[] mods;      // 각 숫자를 K로 나눈 나머지
-    static long[] lenPow;    // 각 숫자의 길이에 대응하는 (10^길이) % K
-    static int[] pow10;      // 10^i % K, i=0..50
-    
-    // 최대공약수
-    static long gcd(long a, long b) {
-        while (b != 0) {
-            long tmp = a % b;
-            a = b;
-            b = tmp;
-        }
-        return a;
-    }
+    static long[] dp;            // 1차원 DP 배열: dp[mask * K + r]
+    static long[] factorial;     // 팩토리얼 (N!까지)
+    static int[] mods;           // 각 숫자를 K로 나눈 나머지
+    static int[][] nextR;        // nextR[i][r]: i번 숫자를 추가했을 때 새 나머지
+    static int[] lenPow;         // 각 숫자의 길이에 해당하는 (10^길이) % K
+    static int[] pow10;          // 10^i % K, i = 0..50
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        int N = sc.nextInt();
+        int N = Integer.parseInt(br.readLine());
         String[] nums = new String[N];
-        for(int i = 0; i < N; i++){
-            nums[i] = sc.next();
+        for (int i = 0; i < N; i++) {
+            nums[i] = br.readLine();
         }
-        int K = sc.nextInt();
-        
-        // 1. factorial (N!까지) 미리 계산
+        int K = Integer.parseInt(br.readLine());
+
+        // 1. 팩토리얼 계산 (long 타입)
         factorial = new long[N + 1];
         factorial[0] = 1;
-        for(int i = 1; i <= N; i++) {
-            factorial[i] = factorial[i - 1] * i; 
+        for (int i = 1; i <= N; i++) {
+            factorial[i] = factorial[i - 1] * i;
         }
-        
-        // 2. pow10[i] = (10^i) % K (i=0..50)
+
+        // 2. pow10[i] = (10^i) % K
         pow10 = new int[51];
         pow10[0] = 1 % K;
-        for(int i = 1; i <= 50; i++){
+        for (int i = 1; i <= 50; i++) {
             pow10[i] = (pow10[i - 1] * 10) % K;
         }
-        
-        // 3. 각 숫자에 대해 mods, lenPow 계산
-        mods = new long[N];
-        lenPow = new long[N];
-        for(int i = 0; i < N; i++){
-            // mods[i] = nums[i] % K
+
+        // 3. mods[i]와 lenPow[i] 계산
+        mods = new int[N];
+        lenPow = new int[N];
+        for (int i = 0; i < N; i++) {
             long m = 0;
-            for(char c : nums[i].toCharArray()){
+            for (char c : nums[i].toCharArray()) {
                 m = (m * 10 + (c - '0')) % K;
             }
-            mods[i] = m;
-            
-            // lenPow[i] = 10^(길이(nums[i])) % K
-            int lengthOfNum = nums[i].length();
-            lenPow[i] = pow10[lengthOfNum];
+            mods[i] = (int) m;
+            lenPow[i] = pow10[nums[i].length()];
         }
-        
-        // 4. DP 배열 준비: 크기 = (1<<N) * K
-        //   dp[mask*K + r] = dp[mask][r]
-        //   메모리는 대략 (2^15 * 100) * 8 bytes ~= 25.6MB (raw) + 오버헤드
-        //   2차원 배열보다 오버헤드가 줄어듦
+
+        // 4. nextR[i][r] 계산
+        nextR = new int[N][K];
+        for (int i = 0; i < N; i++) {
+            for (int r = 0; r < K; r++) {
+                nextR[i][r] = (int) (((r * (long) lenPow[i]) % K + mods[i]) % K);
+            }
+        }
+
+        // 5. DP 배열 초기화
         dp = new long[(1 << N) * K];
-        
-        // 초기값: dp[0][0] = 1
-        dp[0] = 1;  // (mask=0, r=0)
-        
-        // 5. 점화
-        for(int mask = 0; mask < (1 << N); mask++){
-            for(int r = 0; r < K; r++){
-                long currentWays = dp[mask * K + r];
-                if(currentWays == 0) continue; // 스킵
-                
-                // 아직 사용하지 않은 숫자 i를 붙인다
-                for(int i = 0; i < N; i++){
-                    if((mask & (1 << i)) != 0) {
-                        // 이미 사용 중인 숫자
-                        continue;
-                    }
+        dp[0] = 1;  // mask = 0, r = 0
+
+        // 6. DP 점화
+        for (int mask = 0; mask < (1 << N); mask++) {
+            for (int r = 0; r < K; r++) {
+                long ways = dp[mask * K + r];
+                if (ways == 0) continue;
+                for (int i = 0; i < N; i++) {
+                    if ((mask & (1 << i)) != 0) continue;
                     int newMask = mask | (1 << i);
-                    
-                    // 새 나머지 계산
-                    // newR = (r * lenPow[i] + mods[i]) % K
-                    long newR = ( (r * lenPow[i]) % K + mods[i] ) % K;
-                    
-                    dp[newMask * K + (int)newR] += currentWays;
+                    int newR = nextR[i][r];
+                    dp[newMask * K + newR] += ways;
                 }
             }
         }
-        
-        // 6. 결과: dp[((1<<N) - 1) * K + 0] => 모든 숫자 사용 & 나머지 0
+
+        // 7. 결과: dp[((1 << N) - 1) * K + 0]
         long p = dp[((1 << N) - 1) * K];
-        long q = factorial[N]; // 전체 순열 개수
-        
-        // 7. 기약분수 출력
-        if(p == 0) {
-            System.out.println("0/1");
-            return;
+        long q = factorial[N];
+
+        // 8. 기약분수로 출력
+        if (p == 0) {
+            bw.write("0/1\n");
+        } else if (p == q) {
+            bw.write("1/1\n");
+        } else {
+            long g = gcd(p, q);
+            bw.write((p / g) + "/" + (q / g) + "\n");
         }
-        if(p == q) {
-            System.out.println("1/1");
-            return;
+
+        bw.flush();
+    }
+
+    static long gcd(long a, long b) {
+        while (b != 0) {
+            long temp = a % b;
+            a = b;
+            b = temp;
         }
-        
-        long g = gcd(p, q);
-        p /= g;
-        q /= g;
-        
-        System.out.println(p + "/" + q);
+        return a;
     }
 }
