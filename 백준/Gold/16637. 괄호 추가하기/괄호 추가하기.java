@@ -32,7 +32,7 @@ public class Main {
 
 		int answer = Integer.MIN_VALUE;
 		for(int mask=0;mask<(1<<opLength);mask++){
-			if(!isValid(mask, opLength)) continue;
+			if(!isValid(mask)) continue;
 
 			int numIdx = 0;
 			int opIdx = 0;
@@ -52,7 +52,6 @@ public class Main {
 				}
 			}
 
-			// System.out.println("stk = " + stk);
 			int a = stk.poll();
 			while(!stk.isEmpty() || !opStk.isEmpty()){
 				int b = stk.poll();
@@ -60,22 +59,16 @@ public class Main {
 				a = calc(a, b, operators[opIdx]);
 			}
 			answer =Math.max(answer, a);
-			// System.out.println("mask = " + Integer.toBinaryString(mask));
-			// System.out.println("a = " + a);
 		}
 
 		bw.write(String.valueOf(answer));
 		bw.flush();
 		bw.close();
+		br.close();
 	}
 
-	static boolean isValid(int mask, int length){
-		for(int i=0;i<length-1;i++){
-			if ((mask&(1<<i))>0 && (mask&(1<<(i+1)))>0){
-				return false;
-			}
-		}
-		return true;
+	static boolean isValid(int mask){
+		return (mask & (mask >> 1)) == 0;
 	}
 }
 
