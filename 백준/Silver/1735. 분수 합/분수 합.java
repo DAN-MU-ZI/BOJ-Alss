@@ -94,15 +94,11 @@ class Main {
 			Fraction f1 = new Fraction(input[0], input[1]);
 			Fraction f2 = new Fraction(input[2], input[3]);
 
-			int div = gcd(f1.denominator, f2.denominator);
-			int f1Mul = f2.denominator / div;
-			int f2Mul = f1.denominator / div;
-			f1 = mul(f1, f1Mul);
-			f2 = mul(f2, f2Mul);
+			int numerator = f1.numerator * f2.denominator + f2.numerator * f1.denominator;
+			int denominator = f1.denominator * f2.denominator;
 
-			Fraction f = sum(f1, f2);
+			Fraction f = new Fraction(numerator, denominator);
 			f = simplify(f);
-
 
 			return String.format("%d %d\n", f.numerator, f.denominator);
 		}
