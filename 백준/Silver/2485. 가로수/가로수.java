@@ -82,8 +82,7 @@ class Main {
 			int diff = input[1] - input[0];
 			for (int i = 2; i < N; i++) {
 				int diff1 = input[i] - input[i-1];
-				int diff2 = input[i-1] - input[i-2];
-				diff = gcd(diff, gcd(diff1, diff2));
+				diff = gcd(diff, diff1);
 			}
 
 			return (input[N - 1] - input[0]) / diff + 1 - N;
