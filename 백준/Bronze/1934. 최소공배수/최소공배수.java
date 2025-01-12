@@ -7,23 +7,23 @@ class Main {
 		OutputHandler outputHandler = new OutputHandler();
 
 		int T = inputHandler.readLineAsInt();
-		int[][] inputs = inputHandler.readTestCases(T);
-
-		StringBuilder sb = new StringBuilder();
 		Solution solution = new Solution();
+
 		for (int i = 0; i < T; i++) {
-			String result = solution.solve(inputs[i]);
-			sb.append(result).append("\n");
+			int A = inputHandler.readInt();
+			int B = inputHandler.readInt();
+			int result = solution.solve(A, B);
+			outputHandler.write(String.valueOf(result));
 		}
 
-		outputHandler.writeOutput(sb.toString());
-
+		outputHandler.flush();
 		outputHandler.close();
 		inputHandler.close();
 	}
 
 	private static class InputHandler {
 		private final BufferedReader br;
+		private StringTokenizer st;
 
 		public InputHandler() {
 			this.br = new BufferedReader(new InputStreamReader(System.in));
@@ -33,15 +33,11 @@ class Main {
 			return Integer.parseInt(br.readLine());
 		}
 
-		public int[][] readTestCases(int t) throws IOException {
-			int[][] arr = new int[t][2];
-			StringTokenizer st;
-			for (int i = 0; i < t; i++) {
+		public int readInt() throws IOException {
+			if (st == null || !st.hasMoreTokens()) {
 				st = new StringTokenizer(br.readLine());
-				arr[i][0] = Integer.parseInt(st.nextToken());
-				arr[i][1] = Integer.parseInt(st.nextToken());
 			}
-			return arr;
+			return Integer.parseInt(st.nextToken());
 		}
 
 		public void close() throws IOException {
@@ -51,13 +47,19 @@ class Main {
 
 	private static class OutputHandler {
 		private final BufferedWriter bw;
+		private final StringBuilder sb;
 
 		public OutputHandler() {
 			bw = new BufferedWriter(new OutputStreamWriter(System.out));
+			sb = new StringBuilder();
 		}
 
-		public void writeOutput(String string) throws IOException {
-			bw.write(string);
+		public void write(String result) {
+			sb.append(result).append("\n");
+		}
+
+		public void flush() throws IOException {
+			bw.write(sb.toString());
 		}
 
 		public void close() throws IOException {
@@ -77,13 +79,9 @@ class Main {
 			}
 			return b;
 		}
-		public String solve(int[] input) {
-			int A = input[0];
-			int B = input[1];
+		public int solve(int A, int B) {
 			int mul = gcd(A, B);
-			int answer = A * B / mul;
-
-			return String.valueOf(answer);
+			return  A * B / mul;
 		}
 	}
 }
