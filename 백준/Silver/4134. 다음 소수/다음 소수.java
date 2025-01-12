@@ -72,14 +72,6 @@ class Main {
 	}
 
 	private static class Solution {
-		public long gcd(long a, long b) {
-			while (true) {
-				long tmp = a %b;
-				if (tmp == 0) return b;
-				a = b;
-				b = tmp;
-			}
-		}
 		public long solve(long n) {
 			if (n == 0) return 2;
 			if (n == 1) return 2;
