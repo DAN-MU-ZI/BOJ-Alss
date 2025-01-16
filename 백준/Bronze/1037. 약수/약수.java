@@ -15,8 +15,13 @@ class Main{
             arr[i] = Integer.parseInt(st.nextToken());
         }
 
-        int min = Arrays.stream(arr).min().getAsInt();
-        int max = Arrays.stream(arr).max().getAsInt();
+        int min = Integer.MAX_VALUE;
+        int max = 0;
+        for (int i = 0; i < N; i++) {
+            int num = arr[i];
+            if (num < min) min = num;
+            if (num > max) max = num;
+        }
 
         sb.append(min * max).append("\n");
         bw.write(sb.toString());
