@@ -81,15 +81,13 @@ class Main {
 					int max = Math.max(cost, weight);
 					if (max < nodes[nextNode][remain]) {
 						nodes[nextNode][remain] = max;
-						pq.add(new int[] {nextNode, max, remain, node});
+						pq.add(new int[] {nextNode, max, remain});
 					}
 
-					// int min = Math.min(cost, weight);
 					if (remain > 0 && cost < nodes[nextNode][remain - 1]) {
 						nodes[nextNode][remain - 1] = cost;
-						pq.add(new int[] {nextNode, cost, remain - 1, node});
+						pq.add(new int[] {nextNode, cost, remain - 1});
 					}
-
 				}
 			}
 
@@ -97,9 +95,7 @@ class Main {
 			for (int i = 0; i <= K; i++) {
 				answer = Math.min(answer, nodes[N][i]);
 			}
-			// for (int i = 1; i <= N; i++) {
-			// 	System.out.println(Arrays.toString(nodes[i]));
-			// }
+
 			return answer;
 		}
 	}
