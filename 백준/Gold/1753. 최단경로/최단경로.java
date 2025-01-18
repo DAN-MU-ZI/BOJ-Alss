@@ -1,0 +1,89 @@
+import java.io.*;
+import java.util.*;
+
+class Main {
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		StringTokenizer st;
+		StringBuilder sb = new StringBuilder();
+
+		st = new StringTokenizer(br.readLine());
+		int V = Integer.parseInt(st.nextToken());
+		int E = Integer.parseInt(st.nextToken());
+
+		int start = Integer.parseInt(br.readLine());
+
+		Map<Integer, Map<Integer, Integer>> graph = new HashMap<>();
+		for (int i = 0; i <= V; i++) {
+			graph.put(i, new HashMap<>());
+		}
+
+		for (int i = 0; i < E; i++) {
+			st = new StringTokenizer(br.readLine());
+			int src = Integer.parseInt(st.nextToken());
+			int dst = Integer.parseInt(st.nextToken());
+			int weight = Integer.parseInt(st.nextToken());
+
+			graph.get(src).put(dst, Math.min(graph.get(src).getOrDefault(dst, Integer.MAX_VALUE), weight));
+		}
+
+		Solution solution = new Solution(V, E, graph, start);
+		int[] result = solution.solve();
+		for (int i = 1; i <= V; i++) {
+			sb.append(result[i] == Integer.MAX_VALUE ? "INF" : result[i]).append("\n");
+		}
+
+		bw.write(sb.toString());
+		bw.flush();
+		bw.close();
+		br.close();
+	}
+
+	private static class Solution {
+		private int V;
+		private int E;
+		private int[] nodes;
+		private Map<Integer, Map<Integer, Integer>> graph;
+		private boolean[] visited;
+		private int start;
+
+		Solution(int V, int E, Map<Integer, Map<Integer, Integer>> graph, int start) {
+			this.V = V;
+			this.E = E;
+			this.nodes = new int[V + 1];
+			Arrays.fill(this.nodes, Integer.MAX_VALUE);
+			this.graph = graph;
+			this.visited = new boolean[V + 1];
+			this.start = start;
+		}
+
+		public int[] solve() {
+			Queue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(s -> s[1]));
+
+			pq.add(new int[] {start, 0});
+			this.nodes[start] = 0;
+
+			while (!pq.isEmpty()) {
+				int[] current = pq.poll();
+				int node = current[0];
+				int cost = current[1];
+
+				if (visited[node]) continue;
+				visited[node] = true;
+
+				for (Map.Entry<Integer, Integer> neighbor : graph.getOrDefault(node, Collections.emptyMap()).entrySet()) {
+					int nextNode = neighbor.getKey();
+					int weight = neighbor.getValue();
+
+					if (!visited[nextNode] && cost + weight < nodes[nextNode]) {
+						nodes[nextNode] = cost + weight;
+						pq.add(new int[] {nextNode, nodes[nextNode]});
+					}
+				}
+			}
+
+			return nodes;
+		}
+	}
+}
