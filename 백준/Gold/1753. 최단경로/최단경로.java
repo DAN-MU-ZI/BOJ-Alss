@@ -44,7 +44,6 @@ class Main {
 		private int E;
 		private int[] nodes;
 		private List<int[]>[] graph;
-		private boolean[] visited;
 		private int start;
 
 		Solution(int V, int E, List<int[]>[] graph, int start) {
@@ -53,7 +52,6 @@ class Main {
 			this.nodes = new int[V + 1];
 			Arrays.fill(this.nodes, Integer.MAX_VALUE);
 			this.graph = graph;
-			this.visited = new boolean[V + 1];
 			this.start = start;
 		}
 
@@ -68,14 +66,13 @@ class Main {
 				int node = current[0];
 				int cost = current[1];
 
-				if (visited[node]) continue;
-				visited[node] = true;
+				if (cost > nodes[node]) continue;
 
 				for (int[] edge : graph[node]) {
 					int nextNode = edge[0];
 					int weight = edge[1];
 
-					if (!visited[nextNode] && cost + weight < nodes[nextNode]) {
+					if (cost + weight < nodes[nextNode]) {
 						nodes[nextNode] = cost + weight;
 						pq.add(new int[] {nextNode, nodes[nextNode]});
 					}
