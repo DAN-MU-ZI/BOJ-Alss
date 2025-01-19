@@ -75,13 +75,13 @@ class Main {
 			Comparator<Country> comparator = ((s1, s2) -> {
 				int cmp;
 
-				cmp = Integer.compare(s1.gold, s2.gold);
+				cmp = -Integer.compare(s1.gold, s2.gold);
 				if (cmp!=0) return cmp;
 
-				cmp = Integer.compare(s1.silver, s2.silver);
+				cmp = -Integer.compare(s1.silver, s2.silver);
 				if (cmp!=0) return cmp;
 
-				cmp = Integer.compare(s1.bronze, s2.bronze);
+				cmp = -Integer.compare(s1.bronze, s2.bronze);
 
 				return cmp;
 			});
@@ -94,15 +94,12 @@ class Main {
 			while(!pq.isEmpty()){
 				Country cur = pq.poll();
 
-				if (stk.isEmpty()) {
-					stk.add(cur);
-					continue;
-				}
-
-				Country prev = stk.peek();
-				if (comparator.compare(prev, cur) != 0){
-					stk = new Stack<>();
-					rank++;
+				if (!stk.isEmpty()) {
+					Country prev = stk.peek();
+					if (comparator.compare(prev, cur) != 0){
+						stk = new Stack<>();
+						rank++;
+					}
 				}
 
 				if (cur.idx==K) {
