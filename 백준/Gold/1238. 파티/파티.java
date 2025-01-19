@@ -51,20 +51,40 @@ class Main {
 		}
 
 		public int solve() {
-			int[] fromX = dijkstra(X);
+			int[] fromX = dijkstra(this.graph, X);
 
-			int answer = Integer.MIN_VALUE;
+			List<int[]>[] reversed = reversed(this.graph);
+			int[] toX = dijkstra(reversed, X);
+
+			int answer = 0;
 			for (int i = 1; i <= N; i++) {
-				int[] fromI = dijkstra(i);
-				answer = Math.max(answer, fromI[X] + fromX[i]);
+				answer = Math.max(answer, fromX[i] + toX[i]);
 			}
-
 			return answer;
 		}
 
-		public int[] dijkstra(int start) {
+		private List<int[]>[] reversed(List<int[]>[] graph) {
+			List<int[]>[] newGraph = new ArrayList[N + 1];
+			for (int i = 0; i <= N; i++) {
+				newGraph[i] = new ArrayList<>();
+			}
+
+			for (int i = 0; i <= N; i++) {
+				for (int[] edge : graph[i]) {
+					int j = edge[0];
+					int weight = edge[1];
+
+					newGraph[j].add(new int[] {i, weight});
+				}
+			}
+			return newGraph;
+		}
+
+		private int[] dijkstra(List<int[]>[] graph, int start) {
 			Queue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(s -> s[1]));
 			int[] nodes = new int[N + 1];
+			boolean[] visited = new boolean[N + 1];
+
 			Arrays.fill(nodes, Integer.MAX_VALUE);
 			nodes[start] = 0;
 			pq.add(new int[] {start, 0});
@@ -73,14 +93,15 @@ class Main {
 				int node = current[0];
 				int cost = current[1];
 
-				if (cost > nodes[node])
+				if (visited[node])
 					continue;
+				visited[node] = true;
 
 				for (int[] next : graph[node]) {
 					int nextNode = next[0];
 					int weight = next[1];
 
-					if (cost + weight < nodes[nextNode]) {
+					if (!visited[nextNode] && cost + weight < nodes[nextNode]) {
 						nodes[nextNode] = cost + weight;
 						pq.add(new int[] {nextNode, cost + weight});
 					}
