@@ -76,10 +76,12 @@ class Main {
 				int cmp;
 
 				cmp = -Integer.compare(s1.gold, s2.gold);
-				if (cmp!=0) return cmp;
+				if (cmp != 0)
+					return cmp;
 
 				cmp = -Integer.compare(s1.silver, s2.silver);
-				if (cmp!=0) return cmp;
+				if (cmp != 0)
+					return cmp;
 
 				cmp = -Integer.compare(s1.bronze, s2.bronze);
 
@@ -91,18 +93,18 @@ class Main {
 
 			int rank = 1;
 			Stack<Country> stk = new Stack<>();
-			while(!pq.isEmpty()){
+			while (!pq.isEmpty()) {
 				Country cur = pq.poll();
 
 				if (!stk.isEmpty()) {
 					Country prev = stk.peek();
-					if (comparator.compare(prev, cur) != 0){
+					if (comparator.compare(prev, cur) != 0) {
+						rank += stk.size();
 						stk = new Stack<>();
-						rank++;
 					}
 				}
 
-				if (cur.idx==K) {
+				if (cur.idx == K) {
 					break;
 				}
 
