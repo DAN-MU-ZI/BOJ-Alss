@@ -10,10 +10,6 @@ class Main {
 		StringBuilder sb = new StringBuilder();
 		StringTokenizer st;
 
-        /**
-         * cost : 돈, 거리
-         */
-
         int n = Integer.parseInt(br.readLine());
         int[][] A = new int[n][n];
         for (int i = 0; i < n; i++) {
@@ -32,20 +28,6 @@ class Main {
 		bw.close();
 		br.close();
 	}
-    
-    private static class Node {
-        int r;
-        int c;
-        int coin;
-        int dist;
-
-        public Node(int r, int c, int coin, int dist) {
-            this.r = r;
-            this.c = c;
-            this.coin = coin;
-            this.dist = dist;
-        }
-    }
 
 	private static class Solution {
         private final int n;
@@ -57,59 +39,25 @@ class Main {
         }
 
         public int solve() {
-            int answer = INF;
-            int[][]board= new int[n][n];
+            int[][]dp = new int[n][n];
             for (int i = 0; i < n; i++) {
-                Arrays.fill(board[i], INF);
+                Arrays.fill(dp[i], INF);
             }
 
-            Queue<Node> pq = new PriorityQueue<>((s1, s2) -> {
-                return s1.coin - s2.coin;
-            });
-            pq.add(new Node(0, 0, 0, 0));
-            board[0][0] = 0;
+            dp[0][0] = 0;
+
+            for (int i = 1; i < n; i++) {
+                dp[0][i] = Math.min(dp[0][i], dp[0][i-1] + Math.max(0, A[0][i] - A[0][i-1] + 1));
+                dp[i][0] = Math.min(dp[i][0], dp[i-1][0] + Math.max(0, A[i][0] - A[i-1][0] + 1));
+            }
+
+            for (int i = 1; i < n; i++) {
+                for (int j = 1; j < n; j++) {
+                    dp[i][j] = Math.min(dp[i][j], Math.min(dp[i][j-1] + Math.max(0, A[i][j] - A[i][j-1] + 1), dp[i-1][j] + Math.max(0, A[i][j] - A[i-1][j] + 1)));
+                }
+            }
             
-            while (!pq.isEmpty()) {
-                Node cur = pq.poll();
-                int r = cur.r;
-                int c = cur.c;
-                int coin = cur.coin;
-                int dist = cur.dist;
-
-                if (coin > board[cur.r][cur.c]) continue;
-                
-                int nr, nc, nDist, demand;
-                nDist = dist + 1;
-
-                nr = r + 1;
-                nc = c;
-                if (isValid(nr, nc)) {
-                    demand = Math.max(0, A[nr][nc] + 1 - A[r][c]);
-                    if (coin + demand < board[nr][nc]) {
-                        board[nr][nc] = coin + demand;
-                        pq.add(new Node(nr, nc, coin + demand, nDist));
-                    }
-                }
-
-                nr = r;
-                nc = c + 1;
-                if (isValid(nr, nc)) {
-                    demand = Math.max(0, A[nr][nc] + 1 - A[r][c]);
-                    if (coin + demand < board[nr][nc]) {
-                        board[nr][nc] = coin + demand;
-                        pq.add(new Node(nr, nc, coin + demand, nDist));
-                    }
-                }
-            }
-
-            // for (int i = 0; i < n; i++) {
-            //     System.out.println(Arrays.toString(board[i]));
-            // }
-            return board[n - 1][n - 1];
-        }
-
-        private boolean isValid(int r, int c) {
-            return 0 <= r && r < n && 0 <= c && c < n;
+            return dp[n - 1][n - 1];
         }
     }       
 }
