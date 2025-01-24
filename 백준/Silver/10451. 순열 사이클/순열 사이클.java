@@ -2,82 +2,88 @@ import java.io.*;
 import java.util.*;
 
 class Main {
-    public static void main(String[] args) throws IOException {
-        // 입력을 처리하기 위한 BufferedReader, 출력용 BufferedWriter 준비
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+	private static final int INF = Integer.MAX_VALUE;
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringTokenizer st;
-
-        // 테스트 케이스 개수 입력
+		StringBuilder sb = new StringBuilder();
+		
         int T = Integer.parseInt(br.readLine());
-
-        StringBuilder sb = new StringBuilder();
+        Solution solution;
         for (int t = 0; t < T; t++) {
-            // 순열 크기 N
             int N = Integer.parseInt(br.readLine());
-            
-            // 순열 입력
             st = new StringTokenizer(br.readLine());
-            int[] arr = new int[N + 1]; // 1-based indexing
-            for (int i = 1; i <= N; i++) {
+            int[] arr = new int[N];
+            for (int i = 0; i < N; i++) {
                 arr[i] = Integer.parseInt(st.nextToken());
             }
-
-            // 유니온 파인드 클래스 생성
-            UnionFind uf = new UnionFind(N);
-
-            // Union 연산 수행 (i와 arr[i] 연결)
-            for (int i = 1; i <= N; i++) {
-                uf.union(i, arr[i]);
-            }
-
-            // 사이클 개수 계산: 유일한 루트 노드의 개수
-            sb.append(uf.getUniqueRootCount()).append("\n");
+            solution = new Solution(N, arr);
+            sb.append(solution.solve()).append("\n");
         }
 
-        // 결과 출력
-        bw.write(sb.toString());
-        bw.flush();
-        bw.close();
-        br.close();
-    }
+		bw.write(sb.toString());
+		bw.flush();
+		bw.close();
+		br.close();
+	}
 
-    // 유니온 파인드 클래스 정의
-    static class UnionFind {
-        private int[] parent;
+    private static class Union {
+        private final int[] nodes;
 
-        // 초기화: 각 노드는 자기 자신을 부모로 가짐
-        public UnionFind(int n) {
-            parent = new int[n + 1];
-            for (int i = 1; i <= n; i++) {
-                parent[i] = i;
+        public Union(int n) {
+            nodes = new int[n + 1];
+            for (int i = 0; i <= n; i++) {
+                nodes[i] = i;
             }
         }
 
-        // Find 연산: 경로 압축 적용
-        public int find(int x) {
-            if (parent[x] != x) {
-                parent[x] = find(parent[x]); // 경로 압축
+        public int find(int n) {
+            if (nodes[n] != n) {
+                nodes[n] = find(nodes[n]);
             }
-            return parent[x];
+            return nodes[n];
         }
 
-        // Union 연산: 두 노드의 루트를 병합
         public void union(int x, int y) {
             int rootX = find(x);
             int rootY = find(y);
-            if (rootX != rootY) {
-                parent[rootY] = rootX; // y의 루트를 x의 루트로 변경
+
+            if (rootX < rootY) {
+                nodes[rootY] = rootX;
+            } else {
+                nodes[rootX] = rootY;
             }
         }
 
-        // 유일한 루트 노드의 개수를 반환
-        public int getUniqueRootCount() {
-            Set<Integer> uniqueRoots = new HashSet<>();
-            for (int i = 1; i < parent.length; i++) {
-                uniqueRoots.add(find(i)); // 각 노드의 최종 루트를 찾음
+        public int[] getNodes() {
+            return this.nodes;
+        }
+    }
+
+    private static class Solution {
+        private final int N;
+        private final int[] arr;
+
+        public Solution(int N, int[] arr) {
+            this.N = N;
+            this.arr = arr;
+        }
+
+        public int solve() {
+            Union union = new Union(N);
+            
+            for (int i = 1; i <= N; i++) {
+                union.union(i, arr[i- 1]);
             }
-            return uniqueRoots.size();
+
+            Set<Integer> set = new HashSet<>();
+            for (int i = 1; i <= N; i++) {
+                set.add(union.find(i));
+            }
+
+            return set.size();
         }
     }
 }
