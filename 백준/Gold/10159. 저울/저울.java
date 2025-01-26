@@ -42,17 +42,19 @@ class Main {
 		}
 
 		public int[] solve() {
-			boolean[][] isHeavier = new boolean[N + 1][N + 1];
+			boolean[][] graph = new boolean[N + 1][N + 1];
+			boolean[][] reversedGraph = new boolean[N + 1][N + 1];
 			for (int[] input : arr) {
 				int a = input[0];
 				int b = input[1];
-				isHeavier[a][b] = true;
+				graph[a][b] = true;
+				reversedGraph[b][a] = true;
 			}
 
 			int[] answer = new int[N];
 			for (int i = 1; i <= N; i++) {
-				int forward = bfs(isHeavier, i);
-				int backward = reverseBfs(isHeavier, i);
+				int forward = bfs(graph, i);
+				int backward = bfs(reversedGraph, i);
 				answer[i - 1] = N - (forward + backward - 1);
 			}
 
@@ -72,31 +74,6 @@ class Main {
 					if (visited[j - 1])
 						continue;
 					if (!isHeavier[cur][j])
-						continue;
-					visited[j - 1] = true;
-					q.add(j);
-				}
-			}
-			int cnt = 0;
-			for(boolean visit: visited) {
-				if(visit) cnt++;
-			}
-			return cnt;
-		}
-
-		private int reverseBfs(boolean[][] isHeavier, int i) {
-			boolean[] visited = new boolean[N];
-			Queue<Integer> q = new ArrayDeque<>();
-			q.add(i);
-			visited[i - 1] = true;
-
-			while (!q.isEmpty()) {
-				int cur = q.poll();
-
-				for (int j = 1; j <= N; j++) {
-					if (visited[j - 1])
-						continue;
-					if (!isHeavier[j][cur])
 						continue;
 					visited[j - 1] = true;
 					q.add(j);
