@@ -64,8 +64,9 @@ class Main {
 				int node = cur[0];
 				int weight = cur[1];
 
-				if (visited[node])
+				if (visited[node]) {
 					continue;
+				}
 
 				visited[node] = true;
 				answer += weight;
@@ -74,9 +75,9 @@ class Main {
 					int nextNode = next[0];
 					int nextWeight = next[1];
 
-					if (visited[nextNode])
-						continue;
-					pq.add(new int[] {nextNode, nextWeight});
+					if (!visited[nextNode]) {
+						pq.add(new int[] {nextNode, nextWeight});
+					}
 				}
 			}
 
