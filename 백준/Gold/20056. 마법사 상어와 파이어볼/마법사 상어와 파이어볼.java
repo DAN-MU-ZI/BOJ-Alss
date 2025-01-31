@@ -92,19 +92,16 @@ class Main {
                     map.computeIfAbsent(pos, k -> new ArrayList<>()).add(fireBall);
                 }
                 
-                List<FireBall> newFireBalls = new ArrayList<>();
+                this.fireBalls.clear();
+
                 for (Integer key: map.keySet()) {
                     List<FireBall> fireBalls = map.get(key);
                     if (fireBalls.size() >= 2) {
-                        List<FireBall> splitedFireBall = split(fireBalls);
-                        if (splitedFireBall != null) {
-                            newFireBalls.addAll(splitedFireBall);
-                        }
+                        split(fireBalls);
                     } else {
-                        newFireBalls.addAll(fireBalls);
+                        this.fireBalls.add(fireBalls.get(0));
                     }
                 }
-                fireBalls = newFireBalls;
             }
 
             int answer = 0;
@@ -114,7 +111,7 @@ class Main {
             return answer;
         }
 
-        private List<FireBall> split(List<FireBall> fireBalls) {
+        private void split(List<FireBall> fireBalls) {
             int pos, m, s, d;
             pos = 0;
             m = 0;
@@ -133,22 +130,19 @@ class Main {
                 }
             }
 
-            if (m / 5 == 0) return null;
+            if (m / 5 == 0) return;
 
-            List<FireBall> newFireBalls = new ArrayList<>();
             if (isOdd ^ isEven) {
-                newFireBalls.add(new FireBall(pos, m / 5, s / fireBalls.size(), 0));
-                newFireBalls.add(new FireBall(pos, m / 5, s / fireBalls.size(), 2));
-                newFireBalls.add(new FireBall(pos, m / 5, s / fireBalls.size(), 4));
-                newFireBalls.add(new FireBall(pos, m / 5, s / fireBalls.size(), 6));
+                this.fireBalls.add(new FireBall(pos, m / 5, s / fireBalls.size(), 0));
+                this.fireBalls.add(new FireBall(pos, m / 5, s / fireBalls.size(), 2));
+                this.fireBalls.add(new FireBall(pos, m / 5, s / fireBalls.size(), 4));
+                this.fireBalls.add(new FireBall(pos, m / 5, s / fireBalls.size(), 6));
             } else {
-                newFireBalls.add(new FireBall(pos, m / 5, s / fireBalls.size(), 1));
-                newFireBalls.add(new FireBall(pos, m / 5, s / fireBalls.size(), 3));
-                newFireBalls.add(new FireBall(pos, m / 5, s / fireBalls.size(), 5));
-                newFireBalls.add(new FireBall(pos, m / 5, s / fireBalls.size(), 7));
+                this.fireBalls.add(new FireBall(pos, m / 5, s / fireBalls.size(), 1));
+                this.fireBalls.add(new FireBall(pos, m / 5, s / fireBalls.size(), 3));
+                this.fireBalls.add(new FireBall(pos, m / 5, s / fireBalls.size(), 5));
+                this.fireBalls.add(new FireBall(pos, m / 5, s / fireBalls.size(), 7));
             }
-
-            return newFireBalls;
         }
     }
 }
