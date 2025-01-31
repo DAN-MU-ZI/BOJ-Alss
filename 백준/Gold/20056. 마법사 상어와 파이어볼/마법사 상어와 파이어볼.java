@@ -75,10 +75,9 @@ class Main {
             public Integer move() {
                 int nr = pos / N;
                 int nc = pos % N;
-                for (int i = 0; i < s; i++){
-                    nr = (nr + dr[d] + N) % N;
-                    nc = (nc + dc[d] + N) % N;
-                }
+                nr = (nr + N + (dr[d] * s) % N) % N;
+                nc = (nc + N + (dc[d] * s) % N) % N;
+
                 this.pos = nr * N + nc;
                 return nr * N + nc;
             }
