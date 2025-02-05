@@ -46,7 +46,7 @@ public class Main {
                 if (map[r][c] == 0) continue;
                 
                 for (int i = 0; i < 4; i++) {
-                    if (serialCounter(r, c, i) == 5 && !isSixInARow(r, c, i)) {
+                    if (serialCounter(r, c, i) == 5 && !backwardEquals(r, c, i)) {
                         return new int[] {r, c};
                     }
                 }
@@ -54,6 +54,16 @@ public class Main {
         }
         
         return null;
+    }
+
+    private static boolean backwardEquals(int r, int c, int d) {
+        int nr = r - dr[d];
+        int nc = c - dc[d];
+        if (isValid(nr, nc)) {
+            return map[nr][nc] == map[r][c];
+        }
+
+        return false;
     }
 
     private static int serialCounter(int r, int c, int d) {
@@ -72,39 +82,21 @@ public class Main {
             }
         }
         
-        nr = r;
-        nc = c;
-        while(true) {
-            nr -= dr[d];
-            nc -= dc[d];
+        // nr = r;
+        // nc = c;
+        // while(true) {
+        //     nr -= dr[d];
+        //     nc -= dc[d];
 
-            if (isValid(nr, nc) && map[r][c] == map[nr][nc]) {
-                cnt++;
-            } else {
-                break;
-            }
-        }
+        //     if (isValid(nr, nc) && map[r][c] == map[nr][nc]) {
+        //         cnt++;
+        //     } else {
+        //         break;
+        //     }
+        // }
 
 //        System.out.printf("r: %d, c: %d, d: %d, cnt: %d\n", r, c, d, cnt);
         return cnt;
-    }
-
-    private static boolean isSixInARow(int r, int c, int d) {
-        int nr = r - dr[d];
-        int nc = c - dc[d];
-
-        if (isValid(nr, nc) && map[nr][nc] == map[r][c]) {
-            return true; // 6목이므로 인정 불가
-        }
-
-        nr = r + 5 * dr[d];
-        nc = c + 5 * dc[d];
-
-        if (isValid(nr, nc) && map[nr][nc] == map[r][c]) {
-            return true; // 6목이므로 인정 불가
-        }
-
-        return false;
     }
 
     private static boolean isValid(int r, int c) {
