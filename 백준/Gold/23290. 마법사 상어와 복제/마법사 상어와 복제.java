@@ -53,26 +53,15 @@ public class Main {
 		}
 
 		public int solve() {
-			// printInfo();
 			while (S-- > 0) {
-				// System.out.println("start");
-				// 맵 복사
+				// 매 루프마다 copy를 새로 만들어주어야 함
 				copy = createMap();
 				copyMap(copy);
-				// printInfo();
-				// 물고기 한칸 이동
-				// System.out.println("물고기 이동");
+
 				moveFishes();
-				// printInfo();
-				// 상어 이동
 				moveShark();
-				// printInfo();
-				// 냄새 제거(2인거 제거)
 				removeSmell();
-				// printInfo();
-				// 물고기 복붙
 				pasteMap();
-				// printInfo();
 			}
 			int answer = 0;
 			for (int i = 0; i < N; i++) {
@@ -81,15 +70,6 @@ public class Main {
 				}
 			}
 			return answer;
-		}
-
-		private void printInfo() {
-			System.out.printf("shark = [%d, %d]\n", shark[0] + 1, shark[1] + 1);
-			System.out.println(Arrays.deepToString(smell));
-			for (int i = 0; i < N; i++) {
-				System.out.println(Arrays.toString(map[i]));
-			}
-			System.out.println();
 		}
 
 		private void pasteMap() {
@@ -111,22 +91,18 @@ public class Main {
 		}
 
 		int[][] sDeltas = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
-		int[] find, fixed;
+		int[] find, fixedD;  // 'fixed'라는 이름이 예약어는 아니지만 혼동될 수 있어 변경
 		int best;
 
 		private void moveShark() {
 			find = new int[3];
-			fixed = new int[3];
+			fixedD = new int[3];
 			best = -1;
 			dfs(0);
+
 			int nr = shark[0];
 			int nc = shark[1];
-			// if (!map[nr][nc].isEmpty()) {
-			// 	map[nr][nc].clear();
-			// 	smell[nr][nc] = 3;
-			// }
-
-			for (int d : fixed) {
+			for (int d : fixedD) {
 				nr += sDeltas[d][0];
 				nc += sDeltas[d][1];
 				if (!map[nr][nc].isEmpty()) {
@@ -134,13 +110,11 @@ public class Main {
 					smell[nr][nc] = 3;
 				}
 			}
-			// System.out.println(Arrays.toString(fixed));
-			// System.out.println(nr + ":" + nc);
 			shark = new int[] {nr, nc};
 		}
 
-		private void dfs(int stk) {
-			if (stk == 3) {
+		private void dfs(int depth) {
+			if (depth == 3) {
 				boolean[][] visited = new boolean[N][N];
 				int nr = shark[0];
 				int nc = shark[1];
@@ -149,34 +123,33 @@ public class Main {
 				for (int d : find) {
 					nr += sDeltas[d][0];
 					nc += sDeltas[d][1];
-					if (!isValid(nr, nc) )
-						return;
 
-					if(!visited[nr][nc])
+					// 유효 범위 확인
+					if (!isValid(nr, nc)) {
+						return;
+					}
+
+					if (!visited[nr][nc]) {
 						score += map[nr][nc].size();
+					}
 					visited[nr][nc] = true;
 				}
 
 				if (best < score) {
-					for (int i = 0; i < 3; i++) {
-						fixed[i] = find[i];
-					}
+					System.arraycopy(find, 0, fixedD, 0, 3);
 					best = score;
-					// System.out.println(Arrays.toString(fixed) + ", " + score);
-					return;
 				}
 				return;
 			}
 
 			for (int i = 0; i < 4; i++) {
-				find[stk] = i;
-				dfs(stk + 1);
+				find[depth] = i;
+				dfs(depth + 1);
 			}
 		}
 
 		private void moveFishes() {
 			List<Integer>[][] newMap = createMap();
-
 			for (int i = 0; i < N; i++) {
 				for (int j = 0; j < N; j++) {
 					for (int d : map[i][j]) {
@@ -193,18 +166,14 @@ public class Main {
 			while (rot++ < 8) {
 				int nr = r + fDeltas[nd][0];
 				int nc = c + fDeltas[nd][1];
-				// System.out.printf("%d %d %d -> %d %d %d\n", r, c, d, nr, nc, nd);
-				// if (isValid(nr, nc)) {
-				// 	System.out.printf("%b %d\n", isShark(nr, nc), smell[nr][nc]);
-				// }
 				if (!isValid(nr, nc) || isShark(nr, nc) || smell[nr][nc] > 0) {
 					nd = (nd - 1 + 8) % 8;
 					continue;
 				}
 				newMap[nr][nc].add(nd);
-				// System.out.printf("%d %d %d -> %d %d %d\n", r, c, d, nr, nc, nd);
 				return;
 			}
+			// 이동 불가능하면 기존 위치에 그대로 복사
 			newMap[r][c].add(nd);
 		}
 
@@ -218,7 +187,7 @@ public class Main {
 
 		@SuppressWarnings("unchecked")
 		private List<Integer>[][] createMap() {
-			List<Integer>[][] map = (List<Integer>[][])new List[N][N];
+			List<Integer>[][] map = (List<Integer>[][]) new List[N][N];
 			for (int i = 0; i < N; i++) {
 				for (int j = 0; j < N; j++) {
 					map[i][j] = new ArrayList<>();
