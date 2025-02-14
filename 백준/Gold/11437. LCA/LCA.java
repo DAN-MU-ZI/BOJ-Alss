@@ -14,7 +14,7 @@ public class Main {
         StringBuilder sb = new StringBuilder();
 
         N  = Integer.parseInt(br.readLine());
-        K = K = (int)(Math.floor(Math.log(N) / Math.log(2))) + 1;
+        K = (int)(Math.floor(Math.log(N) / Math.log(2))) + 1;
 
         depth = new int[N + 1];
         dp = new int[K][N + 1];
@@ -103,7 +103,7 @@ public class Main {
             int d = cur[1];
 
             for (int next: edges[c]) {
-                if (c == next || visited[next]) continue;
+                if (visited[next]) continue;
                 dp[0][next] = c;
                 
                 depth[next] = d + 1;
