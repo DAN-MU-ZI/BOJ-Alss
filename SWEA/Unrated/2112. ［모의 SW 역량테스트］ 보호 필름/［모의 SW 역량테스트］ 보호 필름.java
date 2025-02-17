@@ -91,9 +91,10 @@ public class Solution {
                 // drug: 주입할 행에 대해, bit i가 1이면 B, 0이면 A. 단, sub에 포함되지 않은 행은 무시해야 하므로 drug는 sub의 부분집합여야 함.
                 for (int drug = 0; drug < (1 << D); drug++) {
                     if ((drug & ~sub) != 0) continue; // 주입하지 않는 행에 대해 값이 있으면 skip
-                    int injMask = transform(sub);
-                    int injVal = transform(drug);
-                    if (testFilmWithInjection(injMask, injVal)) return cnt;
+                    // int injMask = transform(sub);
+                    // int injVal = transform(drug);
+                    // if (testFilmWithInjection(injMask, injVal)) return cnt;
+					if (testFilmWithInjection(sub, drug)) return cnt;
                 }
             }
         }
