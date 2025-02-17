@@ -65,17 +65,6 @@ public class Solution {
         return false;
     }
     
-    // bitmask에 저장된 행 번호(0~D-1; 0은 최상단)가 film 좌표(최상위 비트가 행0)가 되도록 변환
-    static int transform(int mask) {
-        int res = 0;
-        for (int i = 0; i < D; i++) {
-            if ((mask & (1 << i)) != 0) {
-                res |= (1 << (D - 1 - i));
-            }
-        }
-        return res;
-    }
-    
     // 비트마스크를 이용하여 주입 횟수를 최소로 하는 경우를 찾음.
     static int solve() {
         // 먼저 주입 없이도 조건 통과하면 바로 0 반환
@@ -91,9 +80,6 @@ public class Solution {
                 // drug: 주입할 행에 대해, bit i가 1이면 B, 0이면 A. 단, sub에 포함되지 않은 행은 무시해야 하므로 drug는 sub의 부분집합여야 함.
                 for (int drug = 0; drug < (1 << D); drug++) {
                     if ((drug & ~sub) != 0) continue; // 주입하지 않는 행에 대해 값이 있으면 skip
-                    // int injMask = transform(sub);
-                    // int injVal = transform(drug);
-                    // if (testFilmWithInjection(injMask, injVal)) return cnt;
 					if (testFilmWithInjection(sub, drug)) return cnt;
                 }
             }
