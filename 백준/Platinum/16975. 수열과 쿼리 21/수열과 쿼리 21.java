@@ -65,11 +65,11 @@ public class Main {
 
     static void pushDown(int node, int start, int end) {
         if (lazy[node] != 0) {
+            tree[node] += (end - start + 1) * lazy[node];
+
             int mid = (start + end) / 2;
             int leftChild = node * 2;
             int rightChild = node * 2 + 1;
-
-            tree[node] += (end - start + 1) * lazy[node];
 
             if (start != end) {
                 lazy[leftChild] += lazy[node];
@@ -81,13 +81,10 @@ public class Main {
     }
 
     static void update(int node, int start, int end, int L, int R, int k) {
-        pushDown(node, start, end);
-
         if (end < L || start > R) return;
 
         if (L <= start && end <= R) {
             lazy[node] += k;
-            pushDown(node, start, end);
             return;
         }
 
@@ -97,8 +94,6 @@ public class Main {
 
         update(leftChild, start, mid, L, R, k);
         update(rightChild, mid + 1, end, L, R, k);
-
-        tree[node] = tree[leftChild] + tree[rightChild];
     }
 
     static long get(int x) {
