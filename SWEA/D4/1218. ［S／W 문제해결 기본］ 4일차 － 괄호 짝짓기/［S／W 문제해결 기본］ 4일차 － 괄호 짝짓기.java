@@ -52,6 +52,8 @@ public class Solution {
             }
         }
 
+        if (!stk.isEmpty()) return 0;
+        
         return 1;
     }
 }
