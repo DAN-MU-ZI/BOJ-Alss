@@ -5,9 +5,11 @@ public class Main {
 	static int n, m, k;
 	static int[] city;
 	static List<Edge>[] graph;
+	static Queue<Integer>[] pCosts;
 
 	static {
 		int CITY_SIZE = 1000;
+
 		city = new int[CITY_SIZE + 1];
 
 		graph = new ArrayList[CITY_SIZE + 1];
@@ -15,6 +17,10 @@ public class Main {
 			graph[i] = new ArrayList<>();
 		}
 
+		pCosts = new PriorityQueue[CITY_SIZE + 1];
+		for (int i = 1; i <= CITY_SIZE; i++) {
+			pCosts[i] = new PriorityQueue<>((s1, s2) -> s2 - s1);
+		}
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -22,6 +28,8 @@ public class Main {
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		StringBuilder sb = new StringBuilder();
 		StringTokenizer st;
+
+		init();
 
 		st = new StringTokenizer(br.readLine());
 		n = Integer.parseInt(st.nextToken());
@@ -51,12 +59,15 @@ public class Main {
 		return dijkstra(1);
 	}
 
-	private static int[] dijkstra(int s) {
-		Queue<Integer>[] pCosts = new PriorityQueue[n + 1];
+	private static void init() {
 		for (int i = 1; i <= n; i++) {
-			pCosts[i] = new PriorityQueue<>((s1, s2) -> s2 - s1);
+			graph[i].clear();
 		}
-
+		for (int i = 1; i <= n; i++) {
+			pCosts[i].clear();
+		}
+	}
+	private static int[] dijkstra(int s) {
 		Queue<State> pq = new PriorityQueue<>();
 
 		pCosts[s].add(0);
