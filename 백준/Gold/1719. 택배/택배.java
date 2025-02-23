@@ -52,10 +52,9 @@ public class Main {
 
 			for (int end = 1; end <= n; end++) {
 				if (start == end) {
-					answer[start][end] = 0;
-				} else {
-					answer[start][end] = firstVisit[end];
+					continue;
 				}
+				answer[start][end] = firstVisit[end];
 			}
 		}
 		return answer;
