@@ -5,6 +5,11 @@ public class Main {
 	static int n;
 	static int[] arr, tree;
 
+	static {
+		arr = new int[100001];
+		tree = new int[400001];
+	}
+
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -18,7 +23,6 @@ public class Main {
 			if (n == 0)
 				break;
 
-			arr = new int[n + 1];
 			for (int i = 1; i <= n; i++) {
 				arr[i] = Integer.parseInt(st.nextToken());
 			}
@@ -32,8 +36,6 @@ public class Main {
 	}
 
 	static long solve() {
-		tree = new int[4 * n + 1];
-
 		build(1, 1, n);
 
 		return getMax();
