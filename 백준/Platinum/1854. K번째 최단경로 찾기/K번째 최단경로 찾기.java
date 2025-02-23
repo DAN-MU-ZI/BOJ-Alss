@@ -82,13 +82,13 @@ public class Main {
 				int nextNode = next.v;
 				int nextCost = cost + next.w;
 
-				if (pCosts[nextNode].isEmpty() || pCosts[nextNode].size() < k) {
+				Queue<Integer> pCost = pCosts[nextNode];
+				if (pCost.size() < k || pCost.peek() >= nextCost) {
 					pq.add(new State(nextNode, nextCost));
-					pCosts[nextNode].add(nextCost);
-				} else if (nextCost <= pCosts[nextNode].peek()) {
-					pq.add(new State(nextNode, nextCost));
-					pCosts[nextNode].poll();
-					pCosts[nextNode].add(nextCost);
+					pCost.add(nextCost);
+					if (pCost.size() > k) {
+						pCost.poll();
+					}
 				}
 			}
 		}
