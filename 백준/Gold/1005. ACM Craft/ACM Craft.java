@@ -59,10 +59,14 @@ public class Main {
 		}
 
 		while (!dq.isEmpty()) {
-			int curr = dq.poll();
+			int cur = dq.poll();
 
-			for (int next : graph[curr]) {
-				dp[next] = Math.max(dp[next], dp[curr] + costs[next]);
+			if (cur == W) {
+				return dp[W];
+			}
+
+			for (int next : graph[cur]) {
+				dp[next] = Math.max(dp[next], dp[cur] + costs[next]);
 				fanIn[next]--;
 				if (fanIn[next] == 0) {
 					dq.offer(next);
