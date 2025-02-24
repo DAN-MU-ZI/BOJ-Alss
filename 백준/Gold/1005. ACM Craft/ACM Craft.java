@@ -2,9 +2,9 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	static int T, N, K, W, start;
+	static int T, N, K, W;
 	static int[] costs;
-	static List<Integer>[] graph, rev;
+	static List<Integer>[] rev;
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -19,13 +19,11 @@ public class Main {
 			K = Integer.parseInt(st.nextToken());
 
 			costs = new int[N + 1];
-			graph = new ArrayList[N + 1];
 			rev = new ArrayList[N + 1];
 
 			st = new StringTokenizer(br.readLine());
 			for (int j = 1; j <= N; j++) {
 				costs[j] = Integer.parseInt(st.nextToken());
-				graph[j] = new ArrayList<>();
 				rev[j] = new ArrayList<>();
 			}
 
@@ -33,7 +31,6 @@ public class Main {
 				st = new StringTokenizer(br.readLine());
 				int a = Integer.parseInt(st.nextToken());
 				int b = Integer.parseInt(st.nextToken());
-				graph[a].add(b);
 				rev[b].add(a);
 			}
 
@@ -53,14 +50,14 @@ public class Main {
 
 		Queue<int[]> dq = new ArrayDeque<>();
 
-		dq.add(new int[] {0, W, costs[W]});
+		dq.add(new int[] {W, costs[W]});
 		prevs[W] = costs[W];
 
 		List<Integer> ends = new ArrayList<>();
 		while (!dq.isEmpty()) {
 			int[] cur = dq.poll();
-			int node = cur[1];
-			int cost = cur[2];
+			int node = cur[0];
+			int cost = cur[1];
 
 			if (cost < prevs[node]) {
 				continue;
@@ -70,7 +67,7 @@ public class Main {
 			for (int next : rev[node]) {
 				int nextCost = cost + costs[next];
 				if (nextCost > prevs[next]) {
-					dq.add(new int[] {node, next, nextCost});
+					dq.add(new int[] {next, nextCost});
 					prevs[next] = nextCost;
 					isNext = true;
 				}
@@ -82,7 +79,7 @@ public class Main {
 		}
 
 		int answer = 0;
-		for (int end: ends) {
+		for (int end : ends) {
 			answer = Math.max(answer, prevs[end]);
 		}
 		return answer;
