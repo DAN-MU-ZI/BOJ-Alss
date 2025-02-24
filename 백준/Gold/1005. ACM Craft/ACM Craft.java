@@ -3,8 +3,8 @@ import java.util.*;
 
 public class Main {
 	static int T, N, K, W;
-	static int[] costs;
-	static List<Integer>[] rev;
+	static int[] costs, dp, fanIn;
+	static List<Integer>[] graph;
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -19,19 +19,22 @@ public class Main {
 			K = Integer.parseInt(st.nextToken());
 
 			costs = new int[N + 1];
-			rev = new ArrayList[N + 1];
+			dp = new int[N + 1];
+			fanIn = new int[N + 1];
+			graph = new ArrayList[N + 1];
 
 			st = new StringTokenizer(br.readLine());
 			for (int j = 1; j <= N; j++) {
 				costs[j] = Integer.parseInt(st.nextToken());
-				rev[j] = new ArrayList<>();
+				graph[j] = new ArrayList<>();
 			}
 
 			for (int j = 0; j < K; j++) {
 				st = new StringTokenizer(br.readLine());
 				int a = Integer.parseInt(st.nextToken());
 				int b = Integer.parseInt(st.nextToken());
-				rev[b].add(a);
+				graph[a].add(b);
+				fanIn[b]++;
 			}
 
 			W = Integer.parseInt(br.readLine());
@@ -46,42 +49,27 @@ public class Main {
 	}
 
 	static int solve() {
-		int[] prevs = new int[N + 1];
+		Queue<Integer> dq = new ArrayDeque<>();
 
-		Queue<int[]> dq = new ArrayDeque<>();
-
-		dq.add(new int[] {W, costs[W]});
-		prevs[W] = costs[W];
-
-		List<Integer> ends = new ArrayList<>();
-		while (!dq.isEmpty()) {
-			int[] cur = dq.poll();
-			int node = cur[0];
-			int cost = cur[1];
-
-			if (cost < prevs[node]) {
-				continue;
+		for (int i = 1; i <= N; i++) {
+			if (fanIn[i] == 0) {
+				dq.offer(i);
+				dp[i] = costs[i];
 			}
+		}
 
-			boolean isNext = false;
-			for (int next : rev[node]) {
-				int nextCost = cost + costs[next];
-				if (nextCost > prevs[next]) {
-					dq.add(new int[] {next, nextCost});
-					prevs[next] = nextCost;
-					isNext = true;
+		while (!dq.isEmpty()) {
+			int curr = dq.poll();
+
+			for (int next : graph[curr]) {
+				dp[next] = Math.max(dp[next], dp[curr] + costs[next]);
+				fanIn[next]--;
+				if (fanIn[next] == 0) {
+					dq.offer(next);
 				}
 			}
-
-			if (!isNext) {
-				ends.add(node);
-			}
 		}
 
-		int answer = 0;
-		for (int end : ends) {
-			answer = Math.max(answer, prevs[end]);
-		}
-		return answer;
+		return dp[W];
 	}
 }
