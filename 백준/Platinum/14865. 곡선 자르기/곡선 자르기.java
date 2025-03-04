@@ -50,7 +50,7 @@ public class Main {
 					} else {
 						int x = stk.pop();
 						int x1 = Math.min(x, p1[0]);
-						int x2=  Math.max(x, p1[0]);
+						int x2 = Math.max(x, p1[0]);
 						list.add(new int[]{x1, x2});
 					}
 				}
@@ -59,18 +59,27 @@ public class Main {
 			p1 = p2;
 		}
 
-		if (!stk.isEmpty()) {
+		if (stk.size() == 1) {
 			int x = stk.pop();
 			int x1 = Math.min(x, lines[0][0]);
 			int x2 = Math.max(x, lines[0][0]);
 			list.add(new int[]{x1, x2});
+		} else if(stk.size() == 2) {
+			int s1 = stk.pop();
+			int s2 = stk.pop();
+			int x1 = s1 < s2 ? s1 : s2;
+			int x2 = s1 > s2 ? s1 : s2;
+			list.add(new int[] {x1, x2});
 		}
-
 
 		list.sort((s1, s2) -> s1[0] - s2[0]);
 		
 		a = list.size();
 		b = 0;
+
+		if (list.size() == 1) {
+			return new int[] {1, 1};
+		}
 		for (int i = 0; i < list.size();) {
 			i = dfs(i);
 		}
