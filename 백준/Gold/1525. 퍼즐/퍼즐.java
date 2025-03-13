@@ -25,26 +25,19 @@ public class Main {
     static int solve(int[][] arr) {
         int answer = 123456780;
         int init = getHash(arr);
-        // System.out.println(init);
-        // System.out.println(getAddress(init));
-
-        // System.out.println(apply(init, 0, 1, 0, 2));
-        // System.out.println(apply(init, 0, 1, 0, 1));
-        // System.out.println(apply(init, 0, 1, 0, 0));
 
         int[][] deltas = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
         HashMap<Integer, Integer> costs = new HashMap<>();
-        PriorityQueue<int[]> pq = new PriorityQueue<>((s1, s2) -> s1[1] - s2[1]);
+        Queue<Integer> queue = new LinkedList<>();
 
         costs.put(init, 0);
-        pq.add(new int[] { init, 0 });
+        queue.add(init);
 
-        while (!pq.isEmpty()) {
-            int[] cur = pq.poll();
-            int hash = cur[0];
-            int cost = cur[1];
+        while (!queue.isEmpty()) {
+            int hash = queue.poll();
+            int cost = costs.get(hash);
 
-            int addr = getAddress(hash);
+            int addr = findBlankIndex(hash);
             int r = addr / 3;
             int c = addr % 3;
 
@@ -55,18 +48,22 @@ public class Main {
             for (int[] delta : deltas) {
                 int nr = r + delta[0];
                 int nc = c + delta[1];
-                int nextHash = apply(hash, r, c, nr, nc);
+
+                if (!isValid(nr, nc))
+                    continue;
+
+                int nextHash = swapPositions(hash, r, c, nr, nc);
                 int nextCost = cost + 1;
 
                 if (isValid(nr, nc)) {
                     if (costs.containsKey(nextHash)) {
                         if (nextCost < costs.get(nextHash)) {
                             costs.put(nextHash, nextCost);
-                            pq.add(new int[] { nextHash, nextCost });
+                            queue.add(nextHash);
                         }
                     } else {
                         costs.put(nextHash, nextCost);
-                        pq.add(new int[] { nextHash, nextCost });
+                        queue.add(nextHash);
                     }
                 }
             }
@@ -74,15 +71,15 @@ public class Main {
         return -1;
     }
 
-    static int apply(int hash, int r, int c, int nr, int nc) {
-        int fromDiv = (int) Math.pow(10, (8 - (r * 3 + c)));
-        int toDiv = (int) Math.pow(10, (8 - (nr * 3 + nc)));
-        // System.out.println(8 - (r * 3 + c) + ", " + (8 - (nr * 3 + nc)));
+    static final int[] POWERS = { 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000 };
 
-        int from = fromDiv == 0 ? hash % 10 : hash / fromDiv % 10;
-        int to = toDiv == 0 ? hash % 10 : hash / toDiv % 10;
+    static int swapPositions(int hash, int r, int c, int nr, int nc) {
+        int fromDiv = POWERS[8 - (r * 3 + c)];
+        int toDiv = POWERS[8 - (nr * 3 + nc)];
 
-        // System.out.println(from + ", " + to);
+        int from = hash / fromDiv % 10;
+        int to = hash / toDiv % 10;
+
         hash -= from * fromDiv;
         hash -= to * toDiv;
 
@@ -106,7 +103,7 @@ public class Main {
         return hash;
     }
 
-    static int getAddress(int hash) {
+    static int findBlankIndex(int hash) {
         for (int i = 0; i < 9; i++) {
             if (hash % 10 == 0) {
                 return 8 - i;
