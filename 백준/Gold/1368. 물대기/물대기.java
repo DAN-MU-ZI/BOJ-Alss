@@ -2,16 +2,41 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static class Edge implements Comparable<Edge> {
-        int node, cost;
+    static class Edge {
+        int src, dst, cost;
 
-        public Edge(int node, int cost) {
-            this.node = node;
-            this.cost = cost;
+        public Edge(int _src, int _dst, int _cost) {
+            src = _src;
+            dst = _dst;
+            cost = _cost;
+        }
+    }
+
+    static class Boruvka {
+        int[] parent;
+
+        public Boruvka(int n) {
+            parent = new int[n + 1];
+            for (int i = 0; i <= n; i++) {
+                parent[i] = i;
+            }
         }
 
-        public int compareTo(Edge e) {
-            return this.cost - e.cost;
+        public int find(int x) {
+            if (parent[x] != x) {
+                parent[x] = find(parent[x]);
+            }
+            return parent[x];
+        }
+
+        public boolean union(int x, int y) {
+            int xroot = find(x);
+            int yroot = find(y);
+
+            if (xroot == yroot)
+                return false;
+            parent[yroot] = xroot;
+            return true;
         }
     }
 
@@ -19,49 +44,54 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
 
-        List<Edge>[] graph = new ArrayList[N + 1];
-        for (int i = 0; i <= N; i++) {
-            graph[i] = new ArrayList<>();
-        }
+        List<Edge> edges = new ArrayList();
 
         for (int i = 1; i <= N; i++) {
             int cost = Integer.parseInt(br.readLine());
-            graph[0].add(new Edge(i, cost));
-            graph[i].add(new Edge(0, cost));
+            edges.add(new Edge(0, i, cost));
         }
 
         for (int i = 1; i <= N; i++) {
             String[] tokens = br.readLine().split(" ");
             for (int j = 1; j <= N; j++) {
-                int cost = Integer.parseInt(tokens[j - 1]);
                 if (i != j) {
-                    graph[i].add(new Edge(j, cost));
+                    int cost = Integer.parseInt(tokens[j - 1]);
+                    edges.add(new Edge(i, j, cost));
                 }
             }
         }
 
-        boolean[] visited = new boolean[N + 1];
-        PriorityQueue<Edge> pq = new PriorityQueue<>();
-        pq.add(new Edge(0, 0));
-        int totalCost = 0;
+        int tot = 0;
+        Boruvka bv = new Boruvka(N);
+        int components = N + 1;
 
-        while (!pq.isEmpty()) {
-            Edge curr = pq.poll();
-            int node = curr.node;
-            int cost = curr.cost;
+        while (components > 1) {
+            Edge[] minEdge = new Edge[N + 1];
 
-            if (visited[node])
-                continue;
-            visited[node] = true;
-            totalCost += cost;
+            for (Edge e : edges) {
+                int u = bv.find(e.src);
+                int v = bv.find(e.dst);
 
-            for (Edge next : graph[node]) {
-                if (!visited[next.node]) {
-                    pq.add(new Edge(next.node, next.cost));
+                if (u == v)
+                    continue;
+
+                if (minEdge[u] == null || minEdge[u].cost > e.cost) {
+                    minEdge[u] = e;
+                }
+                if (minEdge[v] == null || minEdge[v].cost > e.cost) {
+                    minEdge[v] = e;
+                }
+            }
+
+            for (int i = 0; i <= N; i++) {
+                Edge e = minEdge[i];
+                if (e != null && bv.union(e.src, e.dst)) {
+                    tot += e.cost;
+                    components--;
                 }
             }
         }
 
-        System.out.println(totalCost);
+        System.out.println(tot);
     }
 }
