@@ -3,93 +3,65 @@ import java.util.*;
 
 public class Main {
     static class Edge implements Comparable<Edge> {
-        int src, dst, cost;
+        int node, cost;
 
-        public Edge(int _src, int _dst, int _cost) {
-            src = _src;
-            dst = _dst;
-            cost = _cost;
+        public Edge(int node, int cost) {
+            this.node = node;
+            this.cost = cost;
         }
 
         public int compareTo(Edge e) {
-            return cost - e.cost;
+            return this.cost - e.cost;
         }
     }
 
-    static class UnionFinder {
-        int[] parent;
-        int[] rank;
-
-        public UnionFinder(int n) {
-            parent = new int[n + 1];
-            rank = new int[n + 1];
-            for (int i = 0; i <= n; i++) {
-                parent[i] = i;
-                rank[i] = 0;
-            }
-        }
-
-        public int find(int x) {
-            if (parent[x] != x) {
-                parent[x] = find(parent[x]);
-            }
-            return parent[x];
-        }
-
-        public void union(int x, int y) {
-            int xroot = find(x);
-            int yroot = find(y);
-
-            if (xroot == yroot)
-                return;
-
-            int cmp = compareRank(xroot, yroot);
-            if (cmp < 0) {
-                parent[xroot] = yroot;
-            } else if (cmp > 0) {
-                parent[yroot] = xroot;
-            } else {
-                parent[yroot] = xroot;
-                rank[xroot]++;
-            }
-        }
-
-        public int compareRank(int x, int y) {
-            return rank[x] - rank[y];
-        }
-    }
-
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
         int N = Integer.parseInt(br.readLine());
 
-        PriorityQueue<Edge> pq = new PriorityQueue<>();
-        for (int i = 0; i < N; i++) {
+        List<Edge>[] graph = new ArrayList[N + 1];
+        for (int i = 0; i <= N; i++) {
+            graph[i] = new ArrayList<>();
+        }
+
+        for (int i = 1; i <= N; i++) {
             int cost = Integer.parseInt(br.readLine());
-            pq.add(new Edge(N, i, cost));
+            graph[0].add(new Edge(i, cost));
+            graph[i].add(new Edge(0, cost));
         }
 
-        for (int i = 0; i < N; i++) {
+        for (int i = 1; i <= N; i++) {
             String[] tokens = br.readLine().split(" ");
-            for (int j = i + 1; j < N; j++) {
-                pq.add(new Edge(i, j, Integer.parseInt(tokens[j])));
+            for (int j = 1; j <= N; j++) {
+                int cost = Integer.parseInt(tokens[j - 1]);
+                if (i != j) {
+                    graph[i].add(new Edge(j, cost));
+                }
             }
         }
 
-        int answer = 0;
-        UnionFinder uf = new UnionFinder(N);
+        boolean[] visited = new boolean[N + 1];
+        PriorityQueue<Edge> pq = new PriorityQueue<>();
+        pq.add(new Edge(0, 0));
+        int totalCost = 0;
+
         while (!pq.isEmpty()) {
-            Edge edge = pq.poll();
-            int xroot = uf.find(edge.src);
-            int yroot = uf.find(edge.dst);
+            Edge curr = pq.poll();
+            int node = curr.node;
+            int cost = curr.cost;
 
-            if (xroot != yroot) {
-                answer += edge.cost;
-                uf.union(xroot, yroot);
+            if (visited[node])
+                continue;
+            visited[node] = true;
+            totalCost += cost;
+
+            for (Edge next : graph[node]) {
+                if (!visited[next.node]) {
+                    pq.add(new Edge(next.node, next.cost));
+                }
             }
         }
 
-        System.out.println(answer);
+        System.out.println(totalCost);
     }
 }
