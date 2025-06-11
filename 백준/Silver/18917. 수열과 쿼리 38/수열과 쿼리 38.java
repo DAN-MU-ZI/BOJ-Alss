@@ -8,9 +8,6 @@ public class Main {
 		StringBuilder sb = new StringBuilder();
 		StringTokenizer st;
 
-		TreeSet<Integer> arr = new TreeSet<>();
-		arr.add(0);
-
 		long total = 0;
 		long xor = 0;
 		int N = Integer.parseInt(br.readLine());
@@ -20,12 +17,10 @@ public class Main {
 
 			if (command == 1) {
 				int x = Integer.parseInt(st.nextToken());
-				arr.add(x);
 				total += x;
 				xor ^= x;
 			} else if (command == 2) {
 				int x = Integer.parseInt(st.nextToken());
-				arr.remove(x);
 				total -= x;
 				xor ^= x;
 			} else if (command == 3) {
@@ -35,6 +30,5 @@ public class Main {
 			}
 		}
 		System.out.println(sb);
-
 	}
 }
