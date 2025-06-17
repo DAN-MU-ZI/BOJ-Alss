@@ -59,13 +59,9 @@ public class Main {
 			for (Edge e : graph[cur]) {
 				int next = e.dst;
 				int signalIdx = e.signalIdx;
-				long nextCost;
-				if (dist <= signalIdx) {
-					nextCost = signalIdx + 1;
-				} else {
-					long times = (dist - signalIdx + M - 1) / M;
-					nextCost = times * M + signalIdx + 1;
-				}
+				long times = Math.max(0, (dist - signalIdx + M - 1) / M);
+				long nextCost = times * M + signalIdx + 1;
+
 				if (visited[next] > nextCost) {
 					visited[next] = nextCost;
 					pq.add(new State(next, nextCost));
