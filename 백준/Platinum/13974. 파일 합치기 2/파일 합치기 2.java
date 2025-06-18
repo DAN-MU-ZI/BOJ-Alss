@@ -31,8 +31,8 @@ public class Main {
 					int j = i + len - 1;
 					dp[i][j] = Integer.MAX_VALUE;
 
-					int start = opt[i][j - 1] < i ? i : opt[i][j - 1];
-					int end = opt[i + 1][j] >= j ? j - 1 : opt[i + 1][j];
+					int start = opt[i][j - 1];
+					int end = opt[i + 1][j];
 
 					for (int k = start; k <= end; k++) {
 						int cost = dp[i][k] + dp[k + 1][j] + prefixSum[j] - prefixSum[i - 1];
