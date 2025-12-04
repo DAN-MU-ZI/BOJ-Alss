@@ -3,11 +3,10 @@ import java.util.*;
 
 public class Main {
 
-	static ArrayList<Integer>[] graph;
+	static List<Integer>[] graph;
+	static int[] visited;
+	static int visitToken = 1;
 	static int N, M;
-	static int[] visit;
-	static int visitId = 0;
-	static int[] queue;
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -16,62 +15,66 @@ public class Main {
 		N = Integer.parseInt(st.nextToken());
 		M = Integer.parseInt(st.nextToken());
 
+		buildGraph(br);
+
+		int[] reachCount = new int[N + 1];
+		int maxReach = 0;
+
+		for (int node = 1; node <= N; node++) {
+			int count = bfsCount(node);
+			reachCount[node] = count;
+			maxReach = Math.max(maxReach, count);
+		}
+
+		printResult(reachCount, maxReach);
+	}
+
+	private static void buildGraph(BufferedReader br) throws Exception {
 		graph = new ArrayList[N + 1];
+		visited = new int[N + 1];
+
 		for (int i = 1; i <= N; i++) {
 			graph[i] = new ArrayList<>();
 		}
 
 		for (int i = 0; i < M; i++) {
-			st = new StringTokenizer(br.readLine());
-			int A = Integer.parseInt(st.nextToken());
-			int B = Integer.parseInt(st.nextToken());
-			graph[B].add(A);
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			int a = Integer.parseInt(st.nextToken());
+			int b = Integer.parseInt(st.nextToken());
+			graph[b].add(a);  // b를 해킹하면 a도 해킹 가능
 		}
+	}
 
-		visit = new int[N + 1];
-		queue = new int[N + 1];
+	private static int bfsCount(int start) {
+		ArrayDeque<Integer> queue = new ArrayDeque<>();
+		int token = visitToken++;
 
-		int[] count = new int[N + 1];
-		int max = 0;
+		visited[start] = token;
+		queue.add(start);
 
-		for (int start = 1; start <= N; start++) {
-			int hacked = bfs(start);
-			count[start] = hacked;
-			if (hacked > max) {
-				max = hacked;
+		int count = 1;
+
+		while (!queue.isEmpty()) {
+			int current = queue.poll();
+
+			for (int next : graph[current]) {
+				if (visited[next] == token) continue;
+				visited[next] = token;
+				queue.add(next);
+				count++;
 			}
 		}
 
+		return count;
+	}
+
+	private static void printResult(int[] reachCount, int maxReach) {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 1; i <= N; i++) {
-			if (count[i] == max) {
+			if (reachCount[i] == maxReach) {
 				sb.append(i).append(' ');
 			}
 		}
-
 		System.out.print(sb);
-	}
-
-	static int bfs(int start) {
-		visitId++;
-		int front = 0, rear = 0;
-
-		visit[start] = visitId;
-		queue[rear++] = start;
-
-		int cnt = 1;
-
-		while (front < rear) {
-			int cur = queue[front++];
-
-			for (int next : graph[cur]) {
-				if (visit[next] == visitId) continue;
-				visit[next] = visitId;
-				queue[rear++] = next;
-				cnt++;
-			}
-		}
-
-		return cnt;
 	}
 }
