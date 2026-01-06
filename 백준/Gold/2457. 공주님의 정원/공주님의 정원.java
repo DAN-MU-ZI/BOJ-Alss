@@ -2,29 +2,14 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static class Flower implements Comparable<Flower> {
-        int start;
-        int end;
-
-        public Flower(int sm, int sd, int em, int ed) {
-            this.start = sm * 100 + sd;
-            this.end = em * 100 + ed;
-        }
-
-        @Override
-        public int compareTo(Flower o) {
-            if (this.start == o.start) {
-                return o.end - this.end;
-            }
-            return this.start - o.start;
-        }
-    }
+    private static final int TARGET_START = 301;
+    private static final int TARGET_END = 1201;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
 
-        List<Flower> flowers = new ArrayList<>();
+        int[][] flowers = new int[N][2];
         StringTokenizer st;
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
@@ -32,36 +17,40 @@ public class Main {
             int sd = Integer.parseInt(st.nextToken());
             int em = Integer.parseInt(st.nextToken());
             int ed = Integer.parseInt(st.nextToken());
-            flowers.add(new Flower(sm, sd, em, ed));
+
+            flowers[i][0] = sm * 100 + sd;
+            flowers[i][1] = em * 100 + ed;
         }
 
-        Collections.sort(flowers);
+        Arrays.sort(flowers, (o1, o2) -> {
+            if (o1[0] == o2[0]) return o2[1] - o1[1];
+            return o1[0] - o2[0];
+        });
 
-        int current_end = 301;
+        int currentEnd = TARGET_START;
         int count = 0;
         int idx = 0;
+        int maxEnd = 0;
 
-        while (current_end < 1201) {
-            boolean found_candidate = false;
-            int max_next_end = 0;
+        while (currentEnd < TARGET_END) {
+            boolean isFound = false;
+            maxEnd = currentEnd;
 
-            while (idx < N && flowers.get(idx).start <= current_end) {
-                if (flowers.get(idx).end > max_next_end) {
-                    max_next_end = flowers.get(idx).end;
-                    found_candidate = true;
+            while (idx < N && flowers[idx][0] <= currentEnd) {
+                if (flowers[idx][1] > maxEnd) {
+                    maxEnd = flowers[idx][1];
+                    isFound = true;
                 }
                 idx++;
             }
 
-            if (!found_candidate) {
-                break;
-            }
+            if (!isFound) break;
 
-            current_end = max_next_end;
+            currentEnd = maxEnd;
             count++;
         }
 
-        if (current_end < 1201) {
+        if (currentEnd < TARGET_END) {
             System.out.println(0);
         } else {
             System.out.println(count);
