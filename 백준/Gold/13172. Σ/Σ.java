@@ -28,11 +28,11 @@ public class Main {
         long n = base % MOD;
 
         while (exp > 0) {
-            if ((exp % 2) == 1) {
+            if ((exp & 1) == 1) {
                 result = (result * n) % MOD;
             }
             n = (n * n) % MOD;
-            exp /= 2;
+            exp >>= 1;
         }
         return result;
     }
