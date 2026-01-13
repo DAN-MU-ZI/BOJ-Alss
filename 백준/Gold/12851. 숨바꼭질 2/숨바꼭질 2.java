@@ -2,22 +2,10 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    public static class Log implements Comparable<Log> {
-        int pos;
-        int cnt;
-
-        public Log(int _pos, int _cnt) {
-            pos = _pos;
-            cnt = _cnt;
-        }
-
-        public int compareTo(Log h) {
-            return cnt - h.cnt;
-        }
-    }
+    static int MAX = 100_000;
 
     public static void main(String[] args) throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader((System.in)));
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
         int N = Integer.parseInt(st.nextToken());
@@ -29,8 +17,8 @@ public class Main {
             return;
         }
 
-        int[] time = new int[100_001];
-        int[] count = new int[100_001];
+        int[] time = new int[MAX + 1];
+        int[] count = new int[MAX + 1];
         Arrays.fill(count, Integer.MAX_VALUE);
 
         Queue<Integer> q = new ArrayDeque<>();
@@ -49,7 +37,7 @@ public class Main {
             int[] nextPositions = {current - 1, current + 1, current * 2};
 
             for (int next : nextPositions) {
-                if (next < 0 || next > 100_000) continue;
+                if (next < 0 || next > MAX) continue;
 
                 if (time[next] == 0) {
                     time[next] = time[current] + 1;
