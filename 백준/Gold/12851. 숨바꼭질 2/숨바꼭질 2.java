@@ -29,40 +29,41 @@ public class Main {
             return;
         }
 
-        int[] bestScores = new int[100_001];
-        int[] bestCnt = new int[100_001];
-        Arrays.fill(bestScores, Integer.MAX_VALUE);
+        int[] time = new int[100_001];
+        int[] count = new int[100_001];
+        Arrays.fill(count, Integer.MAX_VALUE);
 
-        Queue<Log> queue = new PriorityQueue<>();
+        Queue<Integer> q = new ArrayDeque<>();
 
-        queue.add(new Log(N, 0));
-        bestScores[N] = 0;
-        bestCnt[N] = 1;
+        q.add(N);
+        time[N] = 1;
+        count[N] = 1;
 
-        while (!queue.isEmpty()) {
-            Log l = queue.poll();
+        while (!q.isEmpty()) {
+            int current = q.poll();
 
-            if (l.cnt > bestScores[l.pos]) continue;
+            if (time[K] != 0 && time[current] > time[K]) {
+                break;
+            }
 
-            int[] nextPositions = {l.pos + 1, l.pos - 1, l.pos * 2};
+            int[] nextPositions = {current - 1, current + 1, current * 2};
 
-            for (int nextPos : nextPositions) {
-                if (nextPos < 0 || nextPos > 100_000) continue;
+            for (int next : nextPositions) {
+                if (next < 0 || next > 100_000) continue;
 
-                int nextTime = l.cnt + 1;
-
-                if (nextTime < bestScores[nextPos]) {
-                    bestScores[nextPos] = nextTime;
-                    bestCnt[nextPos] = bestCnt[l.pos];
-                    queue.add(new Log(nextPos, nextTime));
-                } else if (nextTime == bestScores[nextPos]) {
-                    bestCnt[nextPos] += bestCnt[l.pos];
+                if (time[next] == 0) {
+                    time[next] = time[current] + 1;
+                    count[next] = count[current];
+                    q.add(next);
+                }
+                else if (time[next] == time[current] + 1) {
+                    count[next] += count[current];
                 }
             }
         }
 
-        System.out.println(bestScores[K]);
-        System.out.println(bestCnt[K]);
+        System.out.println(time[K] - 1);
+        System.out.println(count[K]);
 
     }
 }
